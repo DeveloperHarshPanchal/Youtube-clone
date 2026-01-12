@@ -1,35 +1,62 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { Suspense, useEffect, useState } from "react";
+import { Outlet } from "react-router";
+import { Toaster } from "react-hot-toast";
+import { AlertCircle, CheckCircle, Loader2 } from "lucide-react";
+import Header from "./components/Header";
+import SideBar from "./components/SideBar";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [sideBarHidden, setSideBarHidden] = useState(false);
+
+  const toggleSideBar = () => setSideBarHidden(!sideBarHidden);
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div className="flex flex-col min-h-screen">
+      <Header toggleSideBar={toggleSideBar} />
+      <div className="flex relative">
+        <aside
+          className={`lg:transition-all lg:ease-in-out lg:duration-300 ${
+            sideBarHidden ? "lg:w-0" : "lg:w-60"
+          }`}
+        >
+          <SideBar hidden={sideBarHidden} />
+        </aside>
+        <main className="flex-1 p-2 md:p-4 min-w-0 transition-all duration-300">
+          <Suspense fallback={<Loading />}>
+            <Outlet />
+          </Suspense>
+          <div className="h-6"></div>
+        </main>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+      <Toaster
+        position="bottom-left"
+        toastOptions={{
+          style: {
+            background: "var(--color-bg-inverse)",
+            color: "var(--color-fg-inverse)",
+            fontWeight: "bold",
+          },
+          success: {
+            icon: <CheckCircle className="text-green-500" size={20} />,
+          },
+          error: {
+            icon: <AlertCircle className="text-red-500" size={20} />,
+          },
+          loading: {
+            icon: <Loader2 className="animate-spin text-blue-500" size={20} />,
+          },
+        }}
+      />
+    </div>
+  );
 }
 
-export default App
+function Loading() {
+  return (
+    <div className="w-full h-full flex justify-center items-center">
+      <Loader2 className="animate-spin w-10 h-10" />
+    </div>
+  );
+}
+
+export default App;
