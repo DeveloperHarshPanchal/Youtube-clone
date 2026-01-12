@@ -32,7 +32,7 @@ function SideBar({ hidden }) {
         className={clsx(
           "hidden lg:flex flex-col w-60 transition-all duration-300 bg-bg overflow-y-auto",
           "sticky top-16 min-h-[calc(100vh-64px)] p-4",
-          hidden && "opacity-0 invisible"
+          hidden && "opacity-0 invisible",
         )}
       >
         <div className="flex flex-col gap-2">
@@ -41,7 +41,7 @@ function SideBar({ hidden }) {
             className={({ isActive }) =>
               clsx(
                 "flex items-center gap-2 hover:bg-fg/20 p-2 rounded-xl",
-                isActive && "bg-surface"
+                isActive && "bg-surface",
               )
             }
           >
@@ -67,7 +67,7 @@ function SideBar({ hidden }) {
                     className={({ isActive }) =>
                       clsx(
                         "grid grid-cols-5 gap-2 hover:bg-fg/20 p-2 rounded-xl",
-                        isActive && "bg-surface"
+                        isActive && "bg-surface",
                       )
                     }
                   >

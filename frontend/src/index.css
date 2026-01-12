@@ -1,66 +1,88 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
+/* =========================
+   CSS VARIABLES (THEME)
+========================= */
 :root {
-  color-scheme: light dark;
-
   /* YouTube Brand Colors */
   --almost-black: #212121;
   --almost-white: #ffffff;
   --youtube-red: #ff0033;
+
+  /* App colors */
+  --color-fg: var(--almost-black);
+  --color-bg: var(--almost-white);
+  --color-surface: #f5f5f5;
 }
 
-:root[data-theme="light"] {
-  color-scheme: light;
-}
-:root[data-theme="dark"] {
-  color-scheme: dark;
-}
-
-@theme {
-  --color-fg: light-dark(var(--almost-black), var(--almost-white));
-  --color-bg: light-dark(var(--almost-white), var(--almost-black));
-  --color-fg-inverse: light-dark(var(--almost-white), var(--almost-black));
-  --color-bg-inverse: light-dark(var(--almost-black), var(--almost-white));
-  --color-surface: light-dark(#ccc, #333);
+[data-theme="dark"] {
+  --color-fg: var(--almost-white);
+  --color-bg: var(--almost-black);
+  --color-surface: #333333;
 }
 
-body {
-  font-family: "Google Sans", sans-serif;
-  color: var(--color-fg);
-  background-color: var(--color-bg);
+/* =========================
+   BASE STYLES
+========================= */
+@layer base {
+  body {
+    font-family: "Google Sans", system-ui, -apple-system, BlinkMacSystemFont,
+      "Segoe UI", sans-serif;
+    color: var(--color-fg);
+    background-color: var(--color-bg);
+  }
 }
 
-@utility btn {
-  @apply bg-fg/10 py-1.5 px-2.5 rounded-xl font-semibold cursor-pointer hover:bg-fg/25 transition-colors duration-200;
-}
+/* =========================
+   COMPONENTS
+========================= */
+@layer components {
+  .btn {
+    @apply bg-[color:var(--color-fg)/0.1] py-1.5 px-2.5 rounded-xl
+      font-semibold cursor-pointer transition-colors duration-200
+      hover:bg-[color:var(--color-fg)/0.25];
+  }
 
-@utility btn-active {
-  @apply bg-fg text-bg py-1.5 px-2.5 rounded-xl font-semibold cursor-pointer;
-}
+  .btn-active {
+    @apply bg-[color:var(--color-fg)] text-[color:var(--color-bg)]
+      py-1.5 px-2.5 rounded-xl font-semibold cursor-pointer;
+  }
 
-@utility btn-secondary {
-  @apply hover:bg-fg/25 p-2 rounded-full cursor-pointer transition-colors duration-200 min-w-[44px] min-h-[44px] flex items-center justify-center;
-}
+  .btn-secondary {
+    @apply hover:bg-[color:var(--color-fg)/0.25] p-2 rounded-full
+      cursor-pointer transition-colors duration-200
+      min-w-[44px] min-h-[44px] flex items-center justify-center;
+  }
 
-@utility btn-disabled {
-  @apply hover:bg-transparent bg-transparent text-fg/25 cursor-default;
-}
+  .btn-disabled {
+    @apply bg-transparent text-[color:var(--color-fg)/0.25]
+      cursor-default hover:bg-transparent;
+  }
 
-@utility scrollbar-hide {
-  scrollbar-width: none;
-  -ms-overflow-style: none;
+  .scrollbar-hide {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
 
-  &::-webkit-scrollbar {
+  .scrollbar-hide::-webkit-scrollbar {
     display: none;
   }
 }
 
+/* =========================
+   DIALOG STYLES
+========================= */
 dialog {
-  @apply rounded-2xl border-none p-0 shadow-2xl bg-bg text-fg;
-  @apply w-[95vw] max-w-2xl mx-auto my-auto;
+  @apply rounded-2xl border-none p-0 shadow-2xl
+    bg-[color:var(--color-bg)] text-[color:var(--color-fg)]
+    w-[95vw] max-w-2xl mx-auto my-auto;
+}
 
-  @media (max-width: 768px) {
-    @apply w-[95vw] max-h-[90vh] overflow-y-auto;
+@media (max-width: 768px) {
+  dialog {
+    @apply max-h-[90vh] overflow-y-auto;
   }
 }
 
