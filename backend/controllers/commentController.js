@@ -1,84 +1,81 @@
-import Comment from "../models/Comment.js";
+import ErrorCodes from "../lib/error-codes.js";
+import { validateDocumentId } from "../middlewares/validation.js";
+import { Comment } from "../models/index.js";
+import { fail, ok } from "../utils/response.js";
 
-// ADD COMMENT (Protected)
-export const addComment = async (req, res) => {
+function getVideoComments(videoId) {
+  return Comment.find({ videoId })
+    .populate("userId", "username avatar")
+    .sort({ createdAt: -1 })
+    .lean();
+}
+
+export async function createComment(req, res, next) {
   try {
-    const { text, videoId } = req.body;
+    const userId = req.user.id;
+    const { videoId } = req.params;
+    const { content } = req.body;
 
-    if (!text || !videoId) {
-      return res.status(400).json({ message: "Text and videoId are required" });
-    }
+    await Comment.create({ userId, videoId, content });
 
-    const comment = await Comment.create({
-      text,
-      video: videoId,
-      user: req.user.id,
-    });
+    const comments = await getVideoComments(videoId);
 
-    res.status(201).json({
-      message: "Comment added successfully",
-      comment,
-    });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
+    ok(res, "Comment Created Successfully", comments, 201);
+  } catch (err) {
+    next(err);
   }
-};
+}
 
-// GET COMMENTS BY VIDEO ID (Public)
-export const getCommentsByVideo = async (req, res) => {
+export async function updateComment(req, res, next) {
   try {
-    const comments = await Comment.find({ video: req.params.videoId })
-      .populate("user", "username")
-      .sort({ createdAt: -1 });
+    const userId = req.user.id;
+    const { videoId, commentId } = req.params;
+    const { content } = req.body;
 
-    res.status(200).json(comments);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
+    // users can only update their comments
+    const result = await Comment.updateOne(
+      { _id: commentId, userId, videoId },
+      { content }
+    );
+    if (result.matchedCount === 0) {
+      return fail(
+        res,
+        ErrorCodes.UNAUTHORIZED,
+        "Users can only update comments they authored",
+        401
+      );
+    }
+
+    const comments = await getVideoComments(videoId);
+
+    ok(res, "Comment updated successfully", comments, 200);
+  } catch (err) {
+    next(err);
   }
-};
+}
 
-// UPDATE COMMENT (Owner Only)
-export const updateComment = async (req, res) => {
+export async function deleteComment(req, res, next) {
   try {
-    const comment = await Comment.findById(req.params.id);
+    const userId = req.user.id;
+    const { videoId, commentId } = req.params;
 
-    if (!comment) {
-      return res.status(404).json({ message: "Comment not found" });
+    // users can only delete their comments
+    const result = await Comment.deleteOne({ _id: commentId, userId, videoId });
+    if (result.deletedCount === 0) {
+      return fail(
+        res,
+        ErrorCodes.UNAUTHORIZED,
+        "Users can only delete comments they authored",
+        401
+      );
     }
 
-    if (comment.user.toString() !== req.user.id) {
-      return res.status(403).json({ message: "Not authorized" });
-    }
+    const comments = await getVideoComments(videoId);
 
-    comment.text = req.body.text || comment.text;
-    await comment.save();
-
-    res.status(200).json({
-      message: "Comment updated successfully",
-      comment,
-    });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
+    ok(res, "Comment deleted successfully", comments, 200);
+  } catch (err) {
+    next(err);
   }
-};
+}
 
-// DELETE COMMENT (Owner Only)
-export const deleteComment = async (req, res) => {
-  try {
-    const comment = await Comment.findById(req.params.id);
-
-    if (!comment) {
-      return res.status(404).json({ message: "Comment not found" });
-    }
-
-    if (comment.user.toString() !== req.user.id) {
-      return res.status(403).json({ message: "Not authorized" });
-    }
-
-    await comment.deleteOne();
-
-    res.status(200).json({ message: "Comment deleted successfully" });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
+export const validateCommentId = validateDocumentId(Comment, "commentId");

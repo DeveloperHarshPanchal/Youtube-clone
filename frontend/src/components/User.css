@@ -1,0 +1,104 @@
+/* ===============================
+   USER COMPONENT
+================================ */
+
+.user-container {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+/* Create button */
+.user-create-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: color-mix(in srgb, var(--color-fg) 10%, transparent);
+  padding: 8px 12px;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.user-create-btn:hover {
+  background: color-mix(in srgb, var(--color-fg) 25%, transparent);
+}
+
+.user-create-btn span {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .user-create-btn span {
+    display: inline;
+  }
+}
+
+/* Popover base */
+.user-popover {
+  position: fixed;
+  top: 56px;
+  right: 16px;
+  left: auto;
+  min-width: 220px;
+  margin: 0;
+  padding: 16px;
+  border-radius: 12px;
+  background: var(--color-surface);
+  z-index: 50;
+}
+
+/* Popover flex */
+.user-popover .flex-col {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: center;
+}
+
+/* Avatar in popover */
+.user-popover .avatar-lg {
+  width: 50px;
+  height: 50px;
+}
+
+/* Text center */
+.user-popover .text-center {
+  text-align: center;
+}
+
+.user-popover .username {
+  color: var(--color-fg);
+  opacity: 0.5;
+}
+
+/* Separator */
+.user-popover .separator {
+  width: 100%;
+  border-top: 1px solid color-mix(in srgb, var(--color-fg) 20%, transparent);
+  margin: 8px 0;
+}
+
+/* My Channels section */
+.user-popover .channels-header {
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+.user-popover .channel-link {
+  display: flex;
+  gap: 8px;
+  padding: 4px 8px;
+  border-radius: 9999px;
+  align-items: center;
+  text-decoration: none;
+  color: inherit;
+  transition: background 0.2s;
+}
+
+.user-popover .channel-link:hover {
+  background: color-mix(in srgb, var(--color-fg) 15%, transparent);
+}
+
+/* Logout button uses your reusable Button */

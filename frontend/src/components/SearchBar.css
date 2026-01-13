@@ -1,0 +1,84 @@
+/* ================================
+   SEARCH BAR (DESKTOP)
+================================ */
+
+.search-desktop {
+  display: none; /* hidden on mobile */
+  flex: 1;
+  max-width: 42rem;
+  border: 1px solid color-mix(in srgb, var(--color-fg) 20%, transparent);
+  padding: 6px 12px;
+  border-radius: 9999px;
+  background: transparent;
+}
+
+@media (min-width: 768px) {
+  .search-desktop {
+    display: flex;
+    align-items: center;
+  }
+}
+
+/* ================================
+   SHARED SEARCH FORM
+================================ */
+
+.search-form {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.search-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--color-fg);
+  font-size: 1rem;
+}
+
+.search-input::placeholder {
+  color: color-mix(in srgb, var(--color-fg) 50%, transparent);
+}
+
+.search-form button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-fg);
+  display: flex;
+  align-items: center;
+}
+
+/* ================================
+   MOBILE SEARCH OVERLAY
+================================ */
+
+.search-overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--color-bg);
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header inside overlay */
+.search-overlay-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+}
+
+/* Mobile search input wrapper */
+.search-mobile {
+  flex: 1;
+  border: 1px solid color-mix(in srgb, var(--color-fg) 20%, transparent);
+  padding: 6px 12px;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+}

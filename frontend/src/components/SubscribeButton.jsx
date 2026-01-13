@@ -5,6 +5,7 @@ import { useState } from "react";
 import Button from "./Button";
 import { Info } from "lucide-react";
 import toast from "react-hot-toast";
+import "./SubscribeButton.css";
 
 function SubscribeButton({ channel }) {
   const dispatch = useDispatch();
@@ -18,14 +19,12 @@ function SubscribeButton({ channel }) {
 
   function handleSubscribe() {
     setIsPending(true);
-    // optimistic update
     dispatch(addSubscription(channel));
     api
       .patch(`/channel/${channel._id}/subscribe`)
       .then(() => toast.success(`Subscribed to ${channel.name}`))
       .catch((err) => {
         console.error(err);
-        //revert to prev state
         dispatch(removeSubscription(channel._id));
       })
       .finally(() => setIsPending(false));
@@ -33,14 +32,12 @@ function SubscribeButton({ channel }) {
 
   function handleUnsubscribe() {
     setIsPending(true);
-    // optimistic update
     dispatch(removeSubscription(channel._id));
     api
       .patch(`/channel/${channel._id}/unsubscribe`)
       .then(() => toast.success(`Unsubscribed successfully`))
       .catch((err) => {
         console.error(err);
-        //revert to prev state
         dispatch(addSubscription(channel));
       })
       .finally(() => setIsPending(false));
@@ -58,7 +55,7 @@ function SubscribeButton({ channel }) {
       }}
       title={isSubscribed ? "Unsubscribe" : "Subscribe"}
       active={!isSubscribed}
-      className="rounded-3xl h-fit w-fit transition-all duration-300 ease-in-out py-2 px-4"
+      className="subscribe-button"
     />
   );
 }

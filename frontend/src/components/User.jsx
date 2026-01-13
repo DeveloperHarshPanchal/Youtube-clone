@@ -1,6 +1,6 @@
-import { LogOut, Plus, TvMinimal, Video } from "lucide-react";
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { LogOut, Plus } from "lucide-react";
 import api from "../services/api";
 import { loginSuccess, logoutSuccess } from "../store/userSlice";
 import Avatar from "./Avatar";
@@ -10,10 +10,10 @@ import ChannelDialog from "./ChannelDialog";
 import VideoDialog from "./VideoDialog";
 import toast from "react-hot-toast";
 import { Link } from "react-router";
+import "./User.css";
 
 function User() {
   const dispatch = useDispatch();
-
   const user = useSelector((state) => state.user);
   const isAuthenticated = !!user.accessToken;
 
@@ -30,26 +30,24 @@ function User() {
   }, [isAuthenticated]);
 
   return (
-    <div className="flex items-center gap-4">
+    <div className="user-container">
       {isAuthenticated ? (
         <>
           <button
             popoverTarget="create-box"
             title="Create"
-            className="btn flex gap-2"
+            className="user-create-btn"
           >
-            <Plus /> <span className="hidden md:inline">Create</span>
+            <Plus /> <span>Create</span>
           </button>
-          <div
-            id="create-box"
-            popover="auto"
-            className="fixed top-14 right-4 m-0 left-auto min-w-55 p-4 rounded-xl bg-surface"
-          >
-            <div className="flex flex-col items-center gap-4">
+
+          <div id="create-box" popover="auto" className="user-popover">
+            <div className="flex-col">
               <ChannelDialog />
               <VideoDialog />
             </div>
           </div>
+
           <button popoverTarget="user-profile" className="cursor-pointer">
             <Avatar
               src={user.avatar}
@@ -58,32 +56,29 @@ function User() {
               width={30}
             />
           </button>
-          <div
-            popover="auto"
-            id="user-profile"
-            className="fixed top-14 right-4 m-0 left-auto min-w-60 p-4 rounded-xl bg-surface"
-          >
-            <div className="flex flex-col items-center gap-3 justify-between">
+
+          <div popover="auto" id="user-profile" className="user-popover">
+            <div className="flex-col">
               <Avatar
                 src={user.avatar}
                 alt={user.username}
-                width={50}
-                height={50}
+                className="avatar-lg"
               />
               <div className="text-center">
                 <p className="font-bold">{user.email}</p>
-                <p className="text-fg/50">{user.username}</p>
+                <p className="username">{user.username}</p>
               </div>
-              <div className="border w-full border-fg/20"></div>
-              <div className="flex flex-col items-center gap-2">
-                <h3 className="text-xl font-semibold">My Channels</h3>
+              <div className="separator"></div>
+
+              <div className="flex-col">
+                <h3 className="channels-header">My Channels</h3>
                 {user.channels.length > 0 ? (
                   <div>
                     {user.channels.map((chan) => (
                       <Link
                         key={chan._id}
                         to={`/channel/${chan._id}`}
-                        className="flex gap-2 btn-secondary"
+                        className="channel-link"
                       >
                         <Avatar src={chan.avatar} alt={chan.name} />
                         <span>{chan.name}</span>
@@ -94,7 +89,9 @@ function User() {
                   <p>No Channels found</p>
                 )}
               </div>
-              <div className="border w-full border-fg/20"></div>
+
+              <div className="separator"></div>
+
               <Button
                 onClick={() => {
                   dispatch(logoutSuccess());

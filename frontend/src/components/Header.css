@@ -1,0 +1,140 @@
+/* Header.css */
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem; /* py-2 px-2 */
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  gap: 0.5rem;
+  background-color: rgba(var(--bg), 0.95); /* bg-bg/95 */
+  backdrop-filter: blur(4px); /* backdrop-blur-sm */
+}
+
+/* md:px-4 */
+@media (min-width: 768px) {
+  .header {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
+/* Left section */
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem; /* gap-1 */
+}
+
+@media (min-width: 768px) {
+  .header-left {
+    gap: 0.5rem; /* md:gap-2 */
+  }
+}
+
+/* Right section */
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem; /* gap-2 */
+}
+
+@media (min-width: 768px) {
+  .header-right {
+    gap: 1rem; /* md:gap-4 */
+  }
+}
+
+/* Sidebar toggle button */
+.sidebar-toggle {
+  display: none; /* hidden */
+  cursor: pointer;
+}
+
+/* lg:flex */
+@media (min-width: 1024px) {
+  .sidebar-toggle {
+    display: flex;
+  }
+}
+
+/* Mobile search button */
+.mobile-search-btn {
+  display: inline-flex;
+}
+
+/* md:hidden */
+@media (min-width: 768px) {
+  .mobile-search-btn {
+    display: none;
+  }
+}
+/* Mobile search button — hidden by default */
+.mobile-search-btn {
+  display: none;
+}
+
+/* Show only on small screens */
+@media (max-width: 768px) {
+  .mobile-search-btn {
+    display: flex;
+  }
+}
+.mobile-search-btn {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  .mobile-search-btn {
+    display: flex;
+  }
+}
+/* =================================
+   MOBILE SEARCH BUTTON
+   ================================= */
+/* Desktop search bar visible by default */
+.search-desktop {
+  display: none;
+}
+
+/* Show desktop search on md+ */
+@media (min-width: 768px) {
+  .search-desktop {
+    display: flex;
+  }
+}
+.mobile-search-btn {
+  display: none !important;
+}
+
+/* Show ONLY on mobile */
+@media (max-width: 767px) {
+  .mobile-search-btn {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+  }
+}
+/* Notification button */
+.notification-btn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Red notification dot / count */
+.notification-badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  background: red;
+  color: white;
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 1;
+  padding: 3px 5px;
+  border-radius: 9999px;
+}

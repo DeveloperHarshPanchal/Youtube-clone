@@ -1,0 +1,54 @@
+/* ChannelDialog.css */
+
+/* Dialog inner content */
+.channel-dialog-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem; /* gap-3 */
+  padding: 1rem; /* p-4 */
+}
+
+@media (min-width: 768px) {
+  .channel-dialog-content {
+    gap: 1rem; /* md:gap-4 */
+    padding: 1.5rem; /* md:p-6 */
+  }
+}
+
+@media (min-width: 1024px) {
+  .channel-dialog-content {
+    padding: 2.5rem; /* lg:p-10 */
+  }
+}
+
+/* Dialog header */
+.channel-dialog-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+/* Dialog title */
+.channel-dialog-title {
+  font-weight: 600;
+  font-size: 1.25rem; /* text-xl */
+}
+
+@media (min-width: 768px) {
+  .channel-dialog-title {
+    font-size: 1.5rem; /* text-2xl */
+  }
+}
+
+@media (min-width: 1024px) {
+  .channel-dialog-title {
+    font-size: 1.875rem; /* text-3xl */
+  }
+}
+
+/* Error text */
+.channel-dialog-error {
+  color: #f87171; /* text-red-400 */
+}

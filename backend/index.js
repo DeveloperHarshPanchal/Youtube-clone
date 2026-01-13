@@ -1,44 +1,68 @@
-import express from "express";
-import mongoose from "mongoose";
 import cors from "cors";
-import dotenv from "dotenv";
-import authRoutes from "./routes/authRoutes.js";
-import authMiddleware from "./middleware/authMiddleware.js";
-import channelRoutes from "./routes/channelRoutes.js";
-import videoRoutes from "./routes/videoRoutes.js";
-import commentRoutes from "./routes/commentRoutes.js";
+import express from "express";
+import { connect } from "mongoose";
+import morgan from "morgan";
+import ErrorCodes from "./lib/error-codes.js";
+import {
+  authRouter,
+  channelRouter,
+  meRouter,
+  videosRouter,
+} from "./routes/index.js";
+import { getEnvVar } from "./utils/env.js";
+import { fail } from "./utils/response.js";
 
-dotenv.config();
+// register all schemas
+import "./models/index.js";
 
+// connect to database
+const DB_URL = getEnvVar("DB_URL");
+connect(DB_URL)
+  .then(() => console.log("Connected to Database"))
+  .catch(console.error);
+
+// initialise express
 const app = express();
 
-// Middlewares
+// log request detail
+app.use(morgan(":method :url :status - :response-time ms"));
+
+// allow requests from all origins
 app.use(cors());
+
+// parse JSON body
 app.use(express.json());
-app.use("/api/auth", authRoutes);
-app.use("/api/channels", channelRoutes);
-app.use("/api/videos", videoRoutes);
-app.use("/api/comments", commentRoutes);
 
-// Test route
-app.get("/", (req, res) => {
-  res.send("YouTube Clone API is running 🚀");
+// healthcheck endpoint
+app.get("/", (_, res) => {
+  res.send("ok");
 });
 
-app.get("/api/protected", authMiddleware, (req, res) => {
-  res.json({
-    message: "Protected route accessed",
-    userId: req.user.id,
-  });
+// auth routes
+app.use("/auth", authRouter);
+
+// videos routes
+app.use("/videos", videosRouter);
+
+// channel routes
+app.use("/channel", channelRouter);
+
+// me routes
+app.use("/me", meRouter);
+
+// global error handler
+app.use((err, req, res, next) => {
+  console.error(err.message);
+  return fail(
+    res,
+    ErrorCodes.INTERNAL_SERVER_ERROR,
+    "Something went wrong on the server!",
+    500
+  );
 });
 
-// MongoDB Connection
-mongoose
-  .connect(process.env.MONGO_URI)
-  .then(() => {
-    console.log("MongoDB connected");
-    app.listen(process.env.PORT, () =>
-      console.log(`Server running on port ${process.env.PORT}`)
-    );
-  })
-  .catch((err) => console.error(err));
+// start server on PORT from Environment Variables
+const PORT = getEnvVar("PORT", 3000);
+app.listen(PORT, () => {
+  console.log(`Server is running on http://localhost:${PORT}`);
+});

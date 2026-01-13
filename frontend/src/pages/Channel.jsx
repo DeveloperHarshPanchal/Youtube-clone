@@ -11,6 +11,7 @@ import VideoDialog from "../components/VideoDialog";
 import api from "../services/api";
 import { removeChannel } from "../store/userSlice";
 import { formatNumber } from "../utils/format";
+import "./Channel.css";
 
 export async function channelLoader({ params }) {
   try {
@@ -68,45 +69,36 @@ function Channel() {
   const backupBannerUrl = `https://picsum.photos/seed/${name}/800/200`;
 
   return (
-    <div className="flex flex-col gap-3 md:gap-4 min-h-screen p-1 md:p-2">
+    <div className="channel-container">
       {/* Channel Banner */}
-      <div className="w-full h-32 md:h-40 lg:h-50 rounded-xl md:rounded-2xl overflow-hidden">
+      <div className="channel-banner">
         <img
           src={banner ?? backupBannerUrl}
           alt={name}
-          className="w-full h-full object-cover"
           onError={(evt) => (evt.currentTarget.src = backupBannerUrl)}
         />
       </div>
 
       {/* Channel Info Section */}
-      <div className="flex flex-col md:flex-row gap-3 md:gap-4 px-2">
-        {/* Avatar */}
+      <div className="channel-info">
         <Avatar
           src={avatar}
           alt={name}
           width={80}
           height={80}
-          className="md:w-30 md:h-30 lg:w-37.5 lg:h-37.5"
+          className="channel-avatar"
         />
-        <div className="w-full flex flex-col gap-2">
-          <h1 className="text-2xl md:text-3xl font-bold">{name}</h1>
-          <div className="flex flex-wrap gap-2 md:gap-4 text-sm md:text-base">
-            <span className="font-bold">
-              {handle?.startsWith("@") ? handle : "@" + handle}
-            </span>
-            <span className="text-fg/70">
-              {formatNumber(subscriberCount)} subscribers
-            </span>
-            <span className="text-fg/70">
-              {formatNumber(videos.length)} videos
-            </span>
+        <div className="channel-details">
+          <h1 className="channel-name">{name}</h1>
+          <div className="channel-meta">
+            <span>{handle?.startsWith("@") ? handle : "@" + handle}</span>
+            <span>{formatNumber(subscriberCount)} subscribers</span>
+            <span>{formatNumber(videos.length)} videos</span>
           </div>
-          <p className="line-clamp-2 overflow-hidden w-full text-fg/80 max-w-4xl text-sm md:text-base">
-            {description}
-          </p>
+          <p className="channel-description">{description}</p>
+
           {isOwner ? (
-            <div className="flex flex-wrap gap-2 md:gap-4 items-center">
+            <div className="channel-owner-actions">
               <ChannelDialog edit={true} channel={channel} />
               <Button
                 Icon={Trash2}
@@ -120,12 +112,12 @@ function Channel() {
         </div>
       </div>
 
-      <div className="w-full border border-fg/20 mt-2 md:mt-4 mx-2 m-auto"></div>
+      <div className="channel-divider"></div>
 
       {/* Videos Grid */}
-      <div className="flex flex-1 h-full px-1">
+      <div className="channel-videos">
         {videos.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4 w-full">
+          <div className="video-grid">
             {videos.map((video) => (
               <VideoCard
                 video={{ ...video, channelId: { _id, name, avatar } }}
@@ -137,12 +129,10 @@ function Channel() {
             ))}
           </div>
         ) : (
-          <div className="flex-1 flex items-center w-full h-full justify-center">
+          <div className="channel-empty">
             {isOwner ? (
-              <div className="flex flex-col items-center gap-4 p-4">
-                <p className="text-center">
-                  You haven't uploaded any video yet.
-                </p>
+              <div className="channel-empty-owner">
+                <p>You haven't uploaded any video yet.</p>
                 <VideoDialog channelId={_id} />
               </div>
             ) : (

@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Moon, Sun } from "lucide-react";
 import { setTheme, toggleTheme, THEME } from "../store/themeSlice";
+import "./ThemeToggle.css";
 
 function ThemeToggle() {
   const dispatch = useDispatch();
@@ -24,13 +25,17 @@ function ThemeToggle() {
     applySystemTheme(mediaQuery.matches);
 
     const handler = (e) => applySystemTheme(e.matches);
-
     mediaQuery.addEventListener("change", handler);
+
     return () => mediaQuery.removeEventListener("change", handler);
   }, [dispatch]);
 
   return (
-    <button onClick={() => dispatch(toggleTheme())} className="btn-secondary">
+    <button
+      onClick={() => dispatch(toggleTheme())}
+      className="theme-toggle"
+      aria-label="Toggle Theme"
+    >
       {theme === THEME.DARK ? <Sun /> : <Moon />}
     </button>
   );

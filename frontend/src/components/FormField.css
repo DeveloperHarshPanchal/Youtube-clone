@@ -1,0 +1,60 @@
+/* FormField.css */
+
+/* Field container */
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem; /* gap-2 */
+  padding: 0.5rem 1rem; /* py-2 px-4 */
+  border: 1px solid rgba(var(--fg-rgb), 0.2);
+  border-radius: 0.75rem; /* rounded-xl */
+}
+
+/* Label */
+.form-field-label {
+  font-weight: 600;
+  font-size: 1.25rem; /* text-xl */
+  color: rgba(var(--fg-rgb), 0.9);
+}
+
+/* Optional text */
+.form-field-optional {
+  margin-left: 0.25rem;
+  font-weight: 300;
+  color: rgba(var(--fg-rgb), 0.5);
+}
+
+/* Input row */
+.form-field-input-row {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+/* Input */
+.form-field-input {
+  width: 100%;
+  border: none;
+  background: transparent;
+  color: inherit;
+  font-size: 1rem;
+}
+
+.form-field-input:focus {
+  outline: none;
+}
+
+/* Password toggle button */
+.form-field-toggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding-left: 0.25rem;
+  display: flex;
+  align-items: center;
+}
+
+/* Error text */
+.form-field-error {
+  color: #f87171; /* text-red-400 */
+}

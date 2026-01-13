@@ -1,0 +1,15 @@
+/* Avatar.css */
+
+.avatar {
+  display: flex;
+  align-items: center;
+  border-radius: 9999px;
+  height: fit-content;
+  width: fit-content;
+}
+
+.avatar-img {
+  border-radius: 9999px;
+  object-fit: cover;
+  display: block;
+}

@@ -1,0 +1,144 @@
+/* ===============================
+   VIDEO ACTIONS COMPONENT
+================================ */
+
+/* Container for channel info + action buttons */
+.video-actions-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+@media (min-width: 1024px) {
+  .video-actions-container {
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 16px;
+  }
+}
+
+/* Channel Info Section */
+.channel-info {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.channel-info .channel-details {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  min-width: 0;
+  flex: 1;
+}
+
+.channel-info .channel-name {
+  font-weight: 500;
+  font-size: 0.875rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media (min-width: 768px) {
+  .channel-info .channel-name {
+    font-size: 1rem;
+  }
+}
+
+.channel-info .subscribers-count {
+  font-size: 0.75rem;
+  opacity: 0.5;
+}
+
+/* Actions Section */
+.actions-group {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+@media (min-width: 768px) {
+  .actions-group {
+    gap: 12px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .actions-group {
+    gap: 16px;
+    flex-wrap: nowrap;
+  }
+}
+
+/* Like/Dislike Buttons Container */
+.like-dislike-group {
+  display: flex;
+  border-radius: 24px;
+  overflow: hidden;
+  background-color: color-mix(in srgb, var(--color-fg) 10%, transparent);
+}
+
+/* Individual button in like/dislike group */
+.like-dislike-group button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  min-width: 44px;
+  min-height: 44px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.like-dislike-group button:hover {
+  background-color: color-mix(in srgb, var(--color-fg) 20%, transparent);
+}
+
+/* Separator between like/dislike */
+.like-dislike-separator {
+  border-left: 1px solid color-mix(in srgb, var(--color-fg) 20%, transparent);
+  margin: 4px 0;
+}
+
+/* Static buttons */
+.action-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 24px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background 0.2s;
+}
+
+.action-btn:hover {
+  background-color: color-mix(in srgb, var(--color-fg) 10%, transparent);
+}
+
+.action-btn.hidden-md {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .action-btn.hidden-md {
+    display: flex;
+  }
+}
+
+/* Ellipsis menu button */
+.ellipsis-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: color-mix(in srgb, var(--color-fg) 10%, transparent);
+  border-radius: 9999px;
+  min-width: 44px;
+  min-height: 44px;
+  cursor: pointer;
+}

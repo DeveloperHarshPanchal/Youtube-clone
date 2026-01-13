@@ -1,0 +1,122 @@
+/* ===============================
+   VIDEO COMMENTS COMPONENT
+================================ */
+
+.video-comments {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 8px;
+}
+
+.video-comments h2 {
+  font-weight: bold;
+  font-size: 1.5rem;
+  margin: 0;
+}
+
+/* New comment section */
+.video-comments-new {
+  display: flex;
+  gap: 8px;
+  padding: 8px 0;
+}
+
+.video-comments-new input {
+  flex: 1;
+  padding: 8px;
+  border: none;
+  border-bottom: 1px solid var(--color-fg);
+  outline: none;
+  background: transparent;
+}
+
+.video-comments-new input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.video-comments-new button {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+/* Comments list */
+.video-comments-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  overflow: hidden;
+}
+
+.video-comment {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
+  width: 100%;
+}
+
+.video-comment-content {
+  display: flex;
+  gap: 16px;
+  flex: 1;
+}
+
+.video-comment-text {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.video-comment-text p {
+  margin: 0;
+}
+
+.video-comment-author {
+  display: flex;
+  gap: 16px;
+  opacity: 0.7;
+  font-size: 0.875rem;
+}
+
+.video-comment-body {
+  margin-top: 4px;
+}
+
+/* Editing mode */
+.video-comment-editing {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--color-fg);
+}
+
+.video-comment-editing input {
+  flex: 1;
+  padding: 4px 8px;
+  border: none;
+  outline: none;
+}
+
+/* Author action buttons */
+.video-comment-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.btn-secondary {
+  background: rgba(0, 0, 0, 0.05);
+  border: none;
+  border-radius: 9999px;
+  padding: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-secondary:hover {
+  background: rgba(0, 0, 0, 0.15);
+}

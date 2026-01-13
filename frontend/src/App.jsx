@@ -1,9 +1,10 @@
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useState } from "react";
 import { Outlet } from "react-router";
 import { Toaster } from "react-hot-toast";
 import { AlertCircle, CheckCircle, Loader2 } from "lucide-react";
 import Header from "./components/Header";
 import SideBar from "./components/SideBar";
+import "./App.css";
 
 function App() {
   const [sideBarHidden, setSideBarHidden] = useState(false);
@@ -11,23 +12,23 @@ function App() {
   const toggleSideBar = () => setSideBarHidden(!sideBarHidden);
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="app-container">
       <Header toggleSideBar={toggleSideBar} />
-      <div className="flex relative">
+      <div className="app-content">
         <aside
-          className={`lg:transition-all lg:ease-in-out lg:duration-300 ${
-            sideBarHidden ? "lg:w-0" : "lg:w-60"
+          className={`sidebar-wrapper ${
+            sideBarHidden ? "sidebar-hidden" : "sidebar-visible"
           }`}
         >
           <SideBar hidden={sideBarHidden} />
         </aside>
-        <main className="flex-1 p-2 md:p-4 min-w-0 transition-all duration-300">
+        <main className="main-content">
           <Suspense fallback={<Loading />}>
             <Outlet />
           </Suspense>
-          <div className="h-6"></div>
         </main>
       </div>
+
       <Toaster
         position="bottom-left"
         toastOptions={{
@@ -43,7 +44,7 @@ function App() {
             icon: <AlertCircle className="text-red-500" size={20} />,
           },
           loading: {
-            icon: <Loader2 className="animate-spin text-blue-500" size={20} />,
+            icon: <Loader2 className="loader-spin" size={20} />,
           },
         }}
       />
@@ -53,8 +54,8 @@ function App() {
 
 function Loading() {
   return (
-    <div className="w-full h-full flex justify-center items-center">
-      <Loader2 className="animate-spin w-10 h-10" />
+    <div className="loading-container">
+      <Loader2 className="loader-spin" />
     </div>
   );
 }

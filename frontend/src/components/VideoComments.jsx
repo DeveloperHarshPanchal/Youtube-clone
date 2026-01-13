@@ -5,6 +5,7 @@ import { Check, Pen, Trash2 } from "lucide-react";
 import { useSelector } from "react-redux";
 import api from "../services/api";
 import toast from "react-hot-toast";
+import "./VideoComments.css";
 
 function VideoComments({ comments: originalComments, videoId }) {
   const [comments, setComments] = useState(originalComments);
@@ -19,7 +20,7 @@ function VideoComments({ comments: originalComments, videoId }) {
 
   function handleNewComment(evt) {
     evt.preventDefault();
-    if (newComment.trim() === "") return;
+    if (!newComment.trim()) return;
     api
       .post(`/videos/${videoId}/comments`, { content: newComment })
       .then(({ data }) => {
@@ -54,39 +55,34 @@ function VideoComments({ comments: originalComments, videoId }) {
       .catch(console.error);
   }
 
-  // focus editing comment input
   useEffect(() => {
     editingCommentRef.current?.focus();
-  }, [editingComment.id, editingCommentRef]);
+  }, [editingComment.id]);
 
-  // reset state on video change
   useEffect(() => {
     setComments(originalComments);
     setNewComment("");
-    setEditingComment({
-      id: null,
-      content: "",
-    });
+    setEditingComment({ id: null, content: "" });
   }, [originalComments, videoId]);
 
   return (
-    <div className="p-2 flex flex-col gap-4">
-      <p className="font-bold text-2xl">{comments.length} Comments</p>
-      {/* New Comment  */}
-      <div className="flex p-2 gap-2">
+    <div className="video-comments">
+      <p>{comments.length} Comments</p>
+
+      {/* New Comment */}
+      <div className="video-comments-new">
         <Avatar src={user.avatar} alt={user.username} width={40} height={40} />
-        <form onSubmit={handleNewComment} className="border-b flex w-full">
+        <form onSubmit={handleNewComment} className="flex w-full">
           <input
             type="text"
             disabled={!isAuthenticated}
             placeholder={
               isAuthenticated
-                ? "add new comment"
+                ? "Add new comment"
                 : "Please login to add comment"
             }
             value={newComment}
             onChange={(evt) => setNewComment(evt.target.value)}
-            className="w-full focus:outline-0 p-2"
           />
           {isAuthenticated && (
             <button type="submit" className="btn-secondary">
@@ -95,37 +91,20 @@ function VideoComments({ comments: originalComments, videoId }) {
           )}
         </form>
       </div>
-      {/* All comments */}
-      <div className="w-full overflow-hidden flex flex-col gap-4">
+
+      {/* Comments List */}
+      <div className="video-comments-list">
         {comments.map(
           ({ _id, userId: author, content, createdAt, updatedAt }) => (
-            <div
-              key={_id}
-              className="flex gap-2 w-full items-center justify-between"
-            >
-              <div className="flex gap-4 w-full">
+            <div key={_id} className="video-comment">
+              <div className="video-comment-content">
                 <Avatar
                   src={author.avatar}
                   alt={author.username}
                   width={50}
                   height={50}
                 />
-                <div className="flex w-full flex-col">
-                  {/* Not in editing mode display author data */}
-                  {!(editingComment.id === _id) && (
-                    <p className="flex gap-4 text-fg/50">
-                      <span>
-                        {(!author.username.startsWith("@") ? "@" : "") +
-                          author.username}
-                      </span>
-                      <span className="line-clamp-1">
-                        {new Date(updatedAt) > new Date(createdAt)
-                          ? "edited " + timeAgo(updatedAt)
-                          : timeAgo(createdAt)}
-                      </span>
-                    </p>
-                  )}
-                  {/* In Editing mode display input to edit comment */}
+                <div className="video-comment-text">
                   {editingComment.id === _id ? (
                     <form
                       onSubmit={(evt) => {
@@ -134,10 +113,9 @@ function VideoComments({ comments: originalComments, videoId }) {
                           author._id === user.id &&
                           handleEditComment();
                       }}
-                      className="flex w-full justify-between items-center  border-b"
+                      className="video-comment-editing"
                     >
                       <input
-                        type="text"
                         ref={editingCommentRef}
                         value={editingComment.content}
                         onChange={(evt) =>
@@ -146,38 +124,50 @@ function VideoComments({ comments: originalComments, videoId }) {
                             content: evt.target.value,
                           })
                         }
-                        className="w-full focus:outline-0"
                       />
                       <button
-                        title="save comment"
-                        className="btn-secondary"
                         type="submit"
+                        className="btn-secondary"
+                        title="Save comment"
                       >
                         <Check />
                       </button>
                     </form>
                   ) : (
-                    // Render non editing comments
-                    <p className="line-clamp-2">{content}</p>
+                    <>
+                      <p className="video-comment-author">
+                        <span>
+                          {(!author.username.startsWith("@") ? "@" : "") +
+                            author.username}
+                        </span>
+                        <span>
+                          {new Date(updatedAt) > new Date(createdAt)
+                            ? "edited " + timeAgo(updatedAt)
+                            : timeAgo(createdAt)}
+                        </span>
+                      </p>
+                      <p className="video-comment-body">{content}</p>
+                    </>
                   )}
                 </div>
               </div>
-              {/* Only author can update or delete */}
+
+              {/* Author actions */}
               {isAuthenticated &&
                 author._id === user.id &&
-                !(editingComment.id === _id) && (
-                  <div className="flex items-center gap-2">
+                editingComment.id !== _id && (
+                  <div className="video-comment-actions">
                     <button
-                      title="edit comment"
-                      onClick={() => setEditingComment({ id: _id, content })}
+                      title="Edit comment"
                       className="btn-secondary"
+                      onClick={() => setEditingComment({ id: _id, content })}
                     >
                       <Pen />
                     </button>
                     <button
-                      title="delete comment"
-                      onClick={() => handleDeleteComment(_id)}
+                      title="Delete comment"
                       className="btn-secondary"
+                      onClick={() => handleDeleteComment(_id)}
                     >
                       <Trash2 />
                     </button>

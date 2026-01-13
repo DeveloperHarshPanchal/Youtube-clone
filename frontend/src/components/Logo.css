@@ -1,0 +1,12 @@
+/* Logo.css */
+
+.logo-link {
+  display: inline-flex;
+  align-items: center;
+}
+
+.logo-image {
+  width: 125px;
+  height: auto;
+  user-select: none;
+}

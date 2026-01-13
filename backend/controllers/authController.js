@@ -1,67 +1,122 @@
-import User from "../models/User.js";
-import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
+import ErrorCodes from "../lib/error-codes.js";
+import { Channel, User } from "../models/index.js";
+import { generateToken } from "../utils/jwt.js";
+import { comparePassword, hashPassword } from "../utils/password.js";
+import { fail, ok } from "../utils/response.js";
 
-// REGISTER
-export const registerUser = async (req, res) => {
+export async function handleRegister(req, res, next) {
+  const { username, email, password, avatar } = req.validatedBody;
   try {
-    const { username, email, password } = req.body;
-
-    if (!username || !email || !password) {
-      return res.status(400).json({ message: "All fields are required" });
-    }
-
-    const existingUser = await User.findOne({ email });
+    // check if user exists
+    const existingUser = await User.findOne({ email }).lean();
     if (existingUser) {
-      return res.status(400).json({ message: "User already exists" });
+      return fail(
+        res,
+        ErrorCodes.EMAIL_EXISTS,
+        "Account already exists. Try login.",
+        409
+      );
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    const user = await User.create({
+    // create new user with hased password
+    const hashedPassword = await hashPassword(password);
+    const newUser = await User.create({
       username,
       email,
       password: hashedPassword,
+      avatar,
     });
 
-    res.status(201).json({
-      message: "User registered successfully",
-      userId: user._id,
-    });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
+    // jwt to autologin after signup
+    const accessToken = generateToken({ id: newUser._id });
 
-// LOGIN
-export const loginUser = async (req, res) => {
-  try {
-    const { email, password } = req.body;
-
-    const user = await User.findOne({ email });
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
-
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-      return res.status(400).json({ message: "Invalid credentials" });
-    }
-
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-      expiresIn: "1d",
-    });
-
-    res.json({
-      message: "Login successful",
-      token,
-      user: {
-        id: user._id,
-        username: user.username,
-        email: user.email,
+    return ok(
+      res,
+      "User Created Successfully",
+      {
+        id: newUser._id,
+        email: newUser.email,
+        avatar: newUser.avatar,
+        username: newUser.username,
+        channels: newUser.accessToken,
+        accessToken,
       },
-    });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
+      201
+    );
+  } catch (err) {
+    next(err);
   }
-};
+}
+
+export async function handleLogin(req, res, next) {
+  const { email, password } = req.validatedBody;
+  try {
+    // check if user exists
+    const existingUser = await User.findOne({ email })
+      .populate({
+        path: "channels",
+        select: "name avatar createdAt",
+        options: { sort: { createdAt: -1 } },
+      })
+      .lean();
+    if (!existingUser) {
+      return fail(
+        res,
+        ErrorCodes.NOT_FOUND,
+        "User doesn't exists. Try signup.",
+        404
+      );
+    }
+
+    // compare password with password hash from db
+    const isPasswordValid = await comparePassword(
+      password,
+      existingUser.password
+    );
+    if (!isPasswordValid) {
+      return fail(
+        res,
+        ErrorCodes.INVALID_CREDENTIALS,
+        "Invalid credentials",
+        401
+      );
+    }
+
+    const subscriptions = await Channel.find({ subscribers: existingUser._id })
+      .select("name avatar")
+      .lean();
+
+    // generate jwt
+    const accessToken = generateToken({ id: existingUser._id });
+
+    return ok(
+      res,
+      "Login Successful",
+      {
+        id: existingUser._id,
+        email: existingUser.email,
+        avatar: existingUser.avatar,
+        username: existingUser.username,
+        channels: existingUser.channels,
+        accessToken,
+        subscriptions,
+      },
+      200
+    );
+  } catch (err) {
+    next(err);
+  }
+}
+
+export async function isUsernameAvailable(req, res, next) {
+  try {
+    const { username } = req.params;
+    const exists = await User.exists({ username });
+    if (exists) {
+      return fail(res, ErrorCodes.CONFLICT, `${username} already exists`, 409);
+    }
+    ok(res, `${username} is available`, null, 200);
+  } catch (err) {
+    next(err);
+  }
+}

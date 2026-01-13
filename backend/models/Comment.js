@@ -1,24 +1,14 @@
-import mongoose from "mongoose";
+import { Schema, model } from "mongoose";
 
-const commentSchema = new mongoose.Schema(
+const commentSchema = new Schema(
   {
-    text: {
-      type: String,
-      required: true,
-      trim: true,
-    },
-    user: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-      required: true,
-    },
-    video: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Video",
-      required: true,
-    },
+    videoId: { type: Schema.Types.ObjectId, ref: "Video", required: true },
+    userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
+    content: { type: String, required: true },
   },
   { timestamps: true }
 );
 
-export default mongoose.model("Comment", commentSchema);
+commentSchema.index({ videoId: 1, createdAt: -1 }); // Newest comments first
+
+export default model("Comment", commentSchema);

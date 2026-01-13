@@ -7,6 +7,7 @@ import ErrorCodes from "../services/error-codes";
 import { loginSuccess } from "../store/userSlice";
 import api from "../services/api";
 import toast from "react-hot-toast";
+import "./Register.css";
 
 const registerSchema = z.object({
   username: z
@@ -100,8 +101,9 @@ function Register() {
   }
 
   return (
-    <div className="flex flex-col gap-3 md:gap-4 h-full justify-center items-center p-4 md:p-6">
-      <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold">Register</h2>
+    <div className="register-container">
+      <h2 className="register-heading">Register</h2>
+
       <Form
         fields={fields}
         schema={registerSchema}
@@ -111,13 +113,12 @@ function Register() {
         submitButtonTitle="Register"
         disableSubmit={!!error}
       />
-      {error && <div className="text-red-400">{error}</div>}
+
+      {error && <div className="register-error">{error}</div>}
+
       <div>
         Already have an account?{" "}
-        <Link
-          to="/login"
-          className="text-blue-400 underline font-semibold text-base md:text-lg"
-        >
+        <Link to="/login" className="register-login">
           Login
         </Link>
       </div>

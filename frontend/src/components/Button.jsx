@@ -1,4 +1,5 @@
 import clsx from "clsx";
+import "./Button.css";
 
 function Button({
   disabled,
@@ -18,7 +19,7 @@ function Button({
       title={title}
       popoverTarget={popoverTarget}
       className={clsx(
-        "flex items-center gap-2",
+        "btn-base",
         { "btn-disabled": disabled },
         { "btn-active": active },
         { btn: !disabled && !active },

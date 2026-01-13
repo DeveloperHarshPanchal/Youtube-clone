@@ -1,0 +1,10 @@
+/* SubscribeButton.css */
+
+.subscribe-button {
+  border-radius: 1.5rem; /* rounded-3xl */
+  height: fit-content; /* h-fit */
+  width: fit-content; /* w-fit */
+  padding: 8px 16px; /* py-2 px-4 */
+
+  transition: all 0.3s ease-in-out;
+}

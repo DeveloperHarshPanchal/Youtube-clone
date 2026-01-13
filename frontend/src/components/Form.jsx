@@ -1,10 +1,11 @@
-import { useMemo, useRef, useState } from "react";
+import { useMemo, useState } from "react";
 import z from "zod";
 import api from "../services/api";
 import ErrorCodes from "../services/error-codes";
 import Button from "./Button";
 import FormField from "./FormField";
 import toast from "react-hot-toast";
+import "./Form.css";
 
 function Form({
   fields,
@@ -22,6 +23,7 @@ function Form({
     () => Object.fromEntries(fields.map((f) => [f.name, f.defaultValue])),
     [fields]
   );
+
   const [formValues, setFormValues] = useState(defaultFormValues);
   const [formErrors, setFormErrors] = useState({});
 
@@ -29,7 +31,6 @@ function Form({
     onError(null, null);
     setFormValues((prev) => ({ ...prev, [name]: value }));
 
-    // clear field errors on change
     if (formErrors[name]) {
       setFormErrors((prev) => ({
         ...prev,
@@ -41,7 +42,6 @@ function Form({
   async function handleSubmit(evt) {
     evt.preventDefault();
 
-    // client-side validation
     const result = schema.safeParse(formValues);
     if (!result.success) {
       const error = z.treeifyError(result.error);
@@ -49,7 +49,6 @@ function Form({
       return;
     }
 
-    // send to server
     try {
       const response = await api[method](submitPath, result.data);
       onSuccess(response.data.data);
@@ -58,12 +57,10 @@ function Form({
       if (err.response) {
         const { code, error } = err.response.data;
 
-        // handle server side validation errors
         if (code === ErrorCodes.VALIDATION_ERROR) {
           setFormErrors(err.response.data.errors);
           return;
         }
-        console.log(error);
         onError(code, error);
       } else {
         onError(ErrorCodes.NETWORK_ERROR, err.message);
@@ -75,7 +72,7 @@ function Form({
     <form
       onSubmit={handleSubmit}
       method={dialog ? "dialog" : "post"}
-      className="flex flex-col gap-3 md:gap-4 w-full max-w-md md:max-w-lg"
+      className="form"
     >
       {fields.map(({ name, type, onInput, placeholder, required }) => (
         <FormField
@@ -90,12 +87,13 @@ function Form({
           required={required}
         />
       ))}
+
       <Button
         type="submit"
         disabled={disableSubmit}
         title={submitButtonTitle}
         Icon={submitButtonIcon}
-        className="w-fit self-center px-8 py-3"
+        className="form-submit"
       />
     </form>
   );

@@ -1,0 +1,159 @@
+/* Watch.css */
+
+.watch {
+  width: 100%;
+}
+
+/* Page grid */
+.watch-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.75rem; /* gap-3 */
+  padding: 0.25rem; /* p-1 */
+}
+
+@media (min-width: 768px) {
+  .watch-grid {
+    gap: 1rem; /* md:gap-4 */
+    padding: 0.5rem; /* md:p-2 */
+  }
+}
+
+@media (min-width: 1024px) {
+  .watch-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* Main video section */
+.watch-main {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+@media (min-width: 768px) {
+  .watch-main {
+    gap: 1rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .watch-main {
+    grid-column: span 3;
+  }
+}
+
+/* Video iframe */
+.watch-video {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 0.75rem; /* rounded-xl */
+}
+
+@media (min-width: 768px) {
+  .watch-video {
+    border-radius: 1rem; /* rounded-2xl */
+  }
+}
+
+/* Title */
+.watch-title {
+  font-size: 1.125rem; /* text-lg */
+  font-weight: 600;
+  padding-left: 0.25rem;
+  padding-right: 0.25rem;
+}
+
+@media (min-width: 768px) {
+  .watch-title {
+    font-size: 1.5rem; /* text-2xl */
+  }
+}
+
+/* Description container */
+.watch-description-box {
+  overflow: hidden;
+  background-color: var(--surface);
+  padding: 0.75rem;
+  border-radius: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  background-color: #a5a5a538;
+}
+
+@media (min-width: 768px) {
+  .watch-description-box {
+    padding: 1rem;
+    border-radius: 1rem;
+  }
+}
+
+/* Meta info */
+.watch-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  font-weight: 700;
+  font-size: 0.875rem;
+}
+
+@media (min-width: 768px) {
+  .watch-meta {
+    gap: 1rem;
+    font-size: 1rem;
+  }
+}
+
+/* Description text */
+.watch-description {
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+  white-space: pre-wrap;
+  word-break: break-word;
+  transition: all 300ms ease;
+}
+
+@media (min-width: 768px) {
+  .watch-description {
+    font-size: 1rem;
+  }
+}
+
+/* Line clamp (line-clamp-5) */
+.line-clamp-5 {
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* View more button */
+.watch-view-toggle {
+  margin-top: 0.5rem;
+  align-self: flex-end;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+
+@media (min-width: 768px) {
+  .watch-view-toggle {
+    font-size: 1.125rem;
+  }
+}
+
+/* Related videos */
+.watch-related {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+@media (min-width: 1024px) {
+  .watch-related {
+    grid-column: span 1;
+  }
+}

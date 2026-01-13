@@ -5,18 +5,16 @@ import { useNavigate, useRevalidator } from "react-router";
 import z from "zod";
 import Button from "./Button";
 import Form from "./Form";
+import "./VideoDialog.css";
 
 const videoSchema = z.object({
   title: z.string().min(1, { error: "title is required" }),
   description: z.string().optional(),
-  videoUrl: z.url({ error: "Invalid URL" }).refine(
-    (url) => {
-      return url.includes("youtube.com") || url.includes("youtu.be");
-    },
-    {
+  videoUrl: z
+    .url({ error: "Invalid URL" })
+    .refine((url) => url.includes("youtube.com") || url.includes("youtu.be"), {
       error: "URL must be from youtube.com or youtu.be",
-    }
-  ),
+    }),
   thumbnailUrl: z.url({ error: "Invalid URL" }),
   category: z.string().min(1, { error: "category is required" }),
 });
@@ -84,11 +82,8 @@ function VideoDialog({ edit = false, video = {}, channelId }) {
   };
 
   function handleSuccess(data) {
-    if (edit) {
-      revalidator.revalidate();
-    } else {
-      navigate(`/channel/${activeChannelId}`);
-    }
+    if (edit) revalidator.revalidate();
+    else navigate(`/channel/${activeChannelId}`);
     closeDialog();
   }
 
@@ -114,40 +109,37 @@ function VideoDialog({ edit = false, video = {}, channelId }) {
           openDialog();
         }}
       />
+
       <dialog ref={dialogRef} onCancel={closeDialog}>
         {isOpen && (
-          <div className="p-4 md:p-6 lg:p-10 flex flex-col items-center gap-3 md:gap-4">
-            <div className="flex justify-between w-full items-center">
-              <h2 className="text-xl md:text-2xl lg:text-3xl font-semibold">{title}</h2>
-              <button className="btn-secondary" onClick={closeDialog}>
+          <div className="video-dialog-container">
+            <div className="video-dialog-header">
+              <h2>{title}</h2>
+              <button onClick={closeDialog}>
                 <X />
               </button>
             </div>
-            <div>
+
+            <div className="video-dialog-channel">
               {edit ? (
-                <p className="text-sm md:text-base">Channel: {activeChannel?.name || 'Unknown'}</p>
+                <p>Channel: {activeChannel?.name || "Unknown"}</p>
               ) : (
-                <div>
-                  <label htmlFor="channel-select" className="font-semibold">
-                    Channel:{" "}
-                  </label>
+                <label>
+                  Channel:
                   <select
-                    id="channel-select"
+                    value={activeChannelId}
                     onChange={(evt) => setActiveChannelId(evt.target.value)}
                   >
                     {channels.map((chan) => (
-                      <option
-                        key={chan._id}
-                        value={chan._id}
-                        className="flex items-center gap-4"
-                      >
+                      <option key={chan._id} value={chan._id}>
                         {chan.name}
                       </option>
                     ))}
                   </select>
-                </div>
+                </label>
               )}
             </div>
+
             <Form
               fields={fields}
               schema={videoSchema}
@@ -158,7 +150,8 @@ function VideoDialog({ edit = false, video = {}, channelId }) {
               disableSubmit={!!error || channels.length === 0}
               method={method}
             />
-            {error && <div className="text-red-400">{error}</div>}
+
+            {error && <div className="video-dialog-error">{error}</div>}
           </div>
         )}
       </dialog>

@@ -1,157 +1,141 @@
-import Video from "../models/Video.js";
-import Channel from "../models/Channel.js";
+import ErrorCodes from "../lib/error-codes.js";
+import { validateDocumentId } from "../middlewares/validation.js";
+import { Comment, Video } from "../models/index.js";
+import { fail, ok } from "../utils/response.js";
 
-// CREATE VIDEO (Protected)
-export const createVideo = async (req, res) => {
+export async function getCategories(req, res, next) {
   try {
-    const { title, description, videoUrl, thumbnailUrl, category, channelId } =
-      req.body;
+    const categories = await Video.distinct("category");
+    ok(res, "Categories list fetched successfully", categories, 200);
+  } catch (err) {
+    next(err);
+  }
+}
 
-    if (!title || !videoUrl || !thumbnailUrl || !category || !channelId) {
-      return res.status(400).json({ message: "All fields are required" });
+export async function getVideos(req, res, next) {
+  try {
+    const { search, category, limit, offset } = req.query ?? {};
+
+    const query = {};
+    if (search) {
+      query.$text = { $search: search };
+    }
+    if (category) {
+      query.category = category;
     }
 
-    const video = await Video.create({
-      title,
-      description,
-      videoUrl,
-      thumbnailUrl,
-      category,
-      channel: channelId,
-      uploader: req.user.id,
-    });
+    const videos = await Video.find(query, {
+      title: true,
+      thumbnailUrl: true,
+      views: true,
+      channelId: true,
+      createdAt: true,
+    })
+      .populate("channelId", "name avatar")
+      .sort({ createdAt: -1 })
+      .skip(Number(offset))
+      .limit(Number(limit))
+      .lean();
 
-    // Add video to channel
-    await Channel.findByIdAndUpdate(channelId, {
-      $push: { videos: video._id },
-    });
-
-    res.status(201).json({
-      message: "Video uploaded successfully",
-      video,
-    });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
+    ok(res, "Videos fetched Successfully", videos, 200);
+  } catch (err) {
+    next(err);
   }
-};
+}
 
-// GET ALL VIDEOS (Home Page)
-export const getAllVideos = async (req, res) => {
+export async function getVideoById(req, res, next) {
   try {
-    const videos = await Video.find()
-      .populate("channel", "channelName")
-      .sort({ createdAt: -1 });
-
-    res.status(200).json(videos);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
-
-// GET VIDEO BY ID (Player Page)
-export const getVideoById = async (req, res) => {
-  try {
-    const video = await Video.findById(req.params.id)
-      .populate("channel", "channelName")
-      .populate("uploader", "username");
-
+    const { videoId } = req.params;
+    const video = await Video.findById(videoId)
+      .populate("channelId", "name avatar subscribers")
+      .lean();
     if (!video) {
-      return res.status(404).json({ message: "Video not found" });
+      return fail(
+        res,
+        ErrorCodes.NOT_FOUND,
+        `No video found with videoId: ${videoId}`,
+        404
+      );
     }
 
-    res.status(200).json(video);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
+    // Calculate count and remove the array of IDs
+    video.channelId.subscribersCount = video.channelId.subscribers?.length || 0;
+    video.channelId.subscribed = req.user
+      ? video.channelId.subscribers.includes(req.user.id)
+      : false;
 
-// DELETE VIDEO (Owner Only)
-export const deleteVideo = async (req, res) => {
-  try {
-    const video = await Video.findById(req.params.id);
+    delete video.channelId.subscribers;
 
-    if (!video) {
-      return res.status(404).json({ message: "Video not found" });
-    }
+    const comments = await Comment.find({ videoId })
+      .populate("userId", "username avatar")
+      .sort({ createdAt: -1 })
+      .lean();
 
-    if (video.uploader.toString() !== req.user.id) {
-      return res.status(403).json({ message: "Not authorized" });
-    }
+    const relatedVideos = await Video.find(
+      { category: video.category },
+      {
+        title: true,
+        thumbnailUrl: true,
+        views: true,
+        channelId: true,
+        createdAt: true,
+      }
+    )
+      .populate("channelId", "name avatar")
+      .sort({ createdAt: -1 })
+      .lean();
 
-    await video.deleteOne();
-
-    // Remove video from channel
-    await Channel.findByIdAndUpdate(video.channel, {
-      $pull: { videos: video._id },
-    });
-
-    res.status(200).json({ message: "Video deleted successfully" });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
-// INCREMENT VIDEO VIEWS
-export const incrementViews = async (req, res) => {
-  try {
-    const video = await Video.findByIdAndUpdate(
-      req.params.id,
-      { $inc: { views: 1 } },
-      { new: true }
+    ok(
+      res,
+      "Video fetched successfully",
+      { ...video, comments, relatedVideos },
+      200
     );
-
-    if (!video) {
-      return res.status(404).json({ message: "Video not found" });
-    }
-
-    res.status(200).json({
-      message: "View count updated",
-      views: video.views,
-    });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
+  } catch (err) {
+    next(err);
   }
-};
+}
 
-// LIKE VIDEO
-export const likeVideo = async (req, res) => {
-  try {
-    const video = await Video.findByIdAndUpdate(
-      req.params.id,
-      { $inc: { likes: 1 } },
-      { new: true }
-    );
+function updateVideoFieldCount(field) {
+  return async (req, res, next) => {
+    const updateBy = req.query.dec === "true" ? -1 : 1;
+    try {
+      const { videoId } = req.params;
+      const video = await Video.findOneAndUpdate(
+        { _id: videoId, [field]: { $gte: updateBy === -1 ? 1 : 0 } },
+        { $inc: { [field]: updateBy } },
+        { new: true }
+      )
+        .select(field)
+        .lean();
 
-    if (!video) {
-      return res.status(404).json({ message: "Video not found" });
+      if (!video) {
+        return fail(
+          res,
+          ErrorCodes.NOT_FOUND,
+          `No video found with videoId: ${videoId}`,
+          404
+        );
+      }
+
+      ok(
+        res,
+        `Video ${field} ${
+          updateBy === 1 ? "Incremented" : "Decremented"
+        } Successfully`,
+        {
+          [field]: video[field],
+          videoId: video._id,
+        },
+        200
+      );
+    } catch (err) {
+      next(err);
     }
+  };
+}
 
-    res.status(200).json({
-      message: "Video liked",
-      likes: video.likes,
-    });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
+export const incrementVideoViews = updateVideoFieldCount("views");
+export const updateVideoLikes = updateVideoFieldCount("likes");
 
-// DISLIKE VIDEO
-export const dislikeVideo = async (req, res) => {
-  try {
-    const video = await Video.findByIdAndUpdate(
-      req.params.id,
-      { $inc: { dislikes: 1 } },
-      { new: true }
-    );
-
-    if (!video) {
-      return res.status(404).json({ message: "Video not found" });
-    }
-
-    res.status(200).json({
-      message: "Video disliked",
-      dislikes: video.dislikes,
-    });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
+export const validateVideoId = validateDocumentId(Video, "videoId");

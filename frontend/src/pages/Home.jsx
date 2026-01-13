@@ -2,6 +2,7 @@ import { useLoaderData, useSearchParams } from "react-router";
 import VideoCard from "../components/VideoCard";
 import api from "../services/api";
 import Button from "../components/Button";
+import "./Home.css";
 
 export async function homeLoader({ request }) {
   const url = new URL(request.url);
@@ -29,9 +30,9 @@ function Home() {
   const activeCategory = searchParams.get("category") || "All";
 
   return (
-    <div className="h-full">
-      {/* Category Filter - Horizontal scroll on mobile */}
-      <div className="flex gap-2 md:gap-3 p-2 pb-4 sticky top-14.5 bg-bg/95 backdrop-blur-sm overflow-x-auto scrollbar-hide">
+    <div className="home">
+      {/* Category Filter */}
+      <div className="category-bar">
         {["All", ...categories].map((category) => (
           <Button
             key={category}
@@ -43,16 +44,17 @@ function Home() {
           />
         ))}
       </div>
-      <div className="flex h-full justify-center">
+
+      <div className="videos-wrapper">
         {videos.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-4">
+          <div className="video-grid">
             {videos.map((video) => (
               <VideoCard video={video} key={video._id} />
             ))}
           </div>
         ) : (
-          <div className="h-full flex justify-center items-center">
-            <p className="font-semibold text-xl md:text-2xl px-4 text-center">
+          <div className="empty-state">
+            <p className="empty-state-text">
               No videos found for "{searchParams.get("search")}"
             </p>
           </div>

@@ -5,6 +5,7 @@ import z from "zod";
 import { loginSuccess } from "../store/userSlice";
 import ErrorCodes from "../services/error-codes";
 import Form from "../components/Form";
+import "./Login.css";
 
 const loginSchema = z.object({
   email: z.email({ error: "Invalid email" }),
@@ -48,8 +49,9 @@ function Login() {
   }
 
   return (
-    <div className="flex flex-col h-full gap-3 md:gap-4 justify-center items-center p-4 md:p-6">
-      <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold">Login</h2>
+    <div className="login-container">
+      <h2 className="login-heading">Login</h2>
+
       <Form
         fields={fields}
         schema={loginSchema}
@@ -58,13 +60,12 @@ function Login() {
         onError={handleError}
         submitButtonTitle="Login"
       />
-      {error && <div className="text-red-400">{error}</div>}
+
+      {error && <div className="login-error">{error}</div>}
+
       <div>
         Don't have an account?{" "}
-        <Link
-          to="/register"
-          className="text-blue-400 underline font-semibold text-base md:text-lg"
-        >
+        <Link to="/register" className="login-register">
           Register
         </Link>
       </div>

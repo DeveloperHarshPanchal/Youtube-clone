@@ -1,52 +1,22 @@
-import mongoose from "mongoose";
+import { Schema, model } from "mongoose";
 
-const videoSchema = new mongoose.Schema(
+const videoSchema = new Schema(
   {
-    title: {
-      type: String,
-      required: true,
-      trim: true,
-    },
-    description: {
-      type: String,
-      default: "",
-    },
-    videoUrl: {
-      type: String,
-      required: true,
-    },
-    thumbnailUrl: {
-      type: String,
-      required: true,
-    },
-    category: {
-      type: String,
-      required: true,
-    },
-    views: {
-      type: Number,
-      default: 0,
-    },
-    likes: {
-      type: Number,
-      default: 0,
-    },
-    dislikes: {
-      type: Number,
-      default: 0,
-    },
-    channel: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Channel",
-      required: true,
-    },
-    uploader: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-      required: true,
-    },
+    channelId: { type: Schema.Types.ObjectId, ref: "Channel", required: true },
+    title: { type: String, required: true },
+    description: String,
+    videoUrl: { type: String, required: true },
+    thumbnailUrl: { type: String, required: true },
+    views: { type: Number, min: 0, default: 0 },
+    likes: { type: Number, min: 0, default: 0 },
+    category: { type: String, required: true },
   },
   { timestamps: true }
 );
 
-export default mongoose.model("Video", videoSchema);
+videoSchema.index({ channelId: 1, createdAt: -1 }); // Channel Videos (newest first)
+videoSchema.index({ category: 1 }); // filter by category
+videoSchema.index({ title: "text" }); // search by title
+videoSchema.index({ createdAt: -1 }); // Home page feed (newest first)
+
+export default model("Video", videoSchema);

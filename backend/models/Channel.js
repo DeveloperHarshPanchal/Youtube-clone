@@ -1,37 +1,20 @@
-import mongoose from "mongoose";
+import { Schema, model } from "mongoose";
 
-const channelSchema = new mongoose.Schema(
+const channelSchema = new Schema(
   {
-    channelName: {
-      type: String,
-      required: true,
-      trim: true,
-    },
-    owner: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-      required: true,
-    },
-    description: {
-      type: String,
-      default: "",
-    },
-    channelBanner: {
-      type: String,
-      default: "",
-    },
-    subscribers: {
-      type: Number,
-      default: 0,
-    },
-    videos: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Video",
-      },
-    ],
+    userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
+    handle: { type: String, unique: true, required: true },
+    name: { type: String, required: true },
+    description: String,
+    banner: String,
+    avatar: String,
+    subscribers: [{ type: Schema.Types.ObjectId, ref: "User" }],
+    videos: [{ type: Schema.Types.ObjectId, ref: "Video" }],
   },
   { timestamps: true }
 );
 
-export default mongoose.model("Channel", channelSchema);
+channelSchema.index({ userId: 1 }); // User's channels
+channelSchema.index({ name: "text" }); // search by name
+
+export default model("Channel", channelSchema);

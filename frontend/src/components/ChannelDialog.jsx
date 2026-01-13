@@ -8,6 +8,7 @@ import { addChannel, updateChannel } from "../store/userSlice";
 import Button from "./Button";
 import Form from "./Form";
 import ErrorCodes from "../services/error-codes";
+import "./ChannelDialog.css";
 
 const channelSchema = z.object({
   handle: z
@@ -36,6 +37,29 @@ function ChannelDialog({ edit = false, channel = {} }) {
 
   const dialogRef = useRef(null);
   const [error, setError] = useState(null);
+  const [isOpen, setIsOpen] = useState(true);
+
+  const timerRef = useRef(null);
+
+  function checkHandle(evt) {
+    const value = evt.target.value;
+    clearTimeout(timerRef.current);
+    setError(null);
+
+    if (value.length < 3) return;
+    if (edit && value === channel.handle) return;
+
+    timerRef.current = setTimeout(() => {
+      api
+        .get(`/channel/check-handle/${encodeURIComponent(value)}`)
+        .then(() => setError(null))
+        .catch((err) => {
+          if (err?.response?.data?.code === ErrorCodes.CONFLICT) {
+            setError(err.response.data.error);
+          }
+        });
+    }, 300);
+  }
 
   const fields = [
     {
@@ -76,30 +100,11 @@ function ChannelDialog({ edit = false, channel = {} }) {
     },
   ];
 
-  const timerRef = useRef(null);
-  function checkHandle(evt) {
-    const value = evt.target.value;
-    clearTimeout(timerRef.current);
-    setError(null);
-    if (value.length < 3) return;
-    if (edit && value === channel.handle) return;
-    timerRef.current = setTimeout(() => {
-      api
-        .get(`/channel/check-handle/${encodeURIComponent(value)}`)
-        .then(() => setError(null))
-        .catch((err) => {
-          if (err?.response.data?.code === ErrorCodes.CONFLICT) {
-            setError(err.response.data.error);
-          }
-        });
-    }, 300);
-  }
-
-  const [isOpen, setIsOpen] = useState(true);
   const openDialog = () => {
     setIsOpen(true);
     dialogRef.current.showModal();
   };
+
   const closeDialog = () => {
     setIsOpen(false);
     setError(null);
@@ -139,17 +144,17 @@ function ChannelDialog({ edit = false, channel = {} }) {
           openDialog();
         }}
       />
+
       <dialog ref={dialogRef} onCancel={closeDialog}>
         {isOpen && (
-          <div className="p-4 md:p-6 lg:p-10 flex flex-col items-center gap-3 md:gap-4">
-            <div className="flex justify-between w-full items-center">
-              <h2 className="text-xl md:text-2xl lg:text-3xl font-semibold">
-                {title}
-              </h2>
+          <div className="channel-dialog-content">
+            <div className="channel-dialog-header">
+              <h2 className="channel-dialog-title">{title}</h2>
               <button className="btn-secondary" onClick={closeDialog}>
                 <X />
               </button>
             </div>
+
             <Form
               fields={fields}
               schema={channelSchema}
@@ -160,7 +165,8 @@ function ChannelDialog({ edit = false, channel = {} }) {
               disableSubmit={!!error}
               method={method}
             />
-            {error && <div className="text-red-400">{error}</div>}
+
+            {error && <div className="channel-dialog-error">{error}</div>}
           </div>
         )}
       </dialog>

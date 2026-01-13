@@ -1,28 +1,64 @@
-import express from "express";
+import { Router } from "express";
+import z from "zod";
 import {
-  createVideo,
-  getAllVideos,
+  createComment,
+  deleteComment,
+  updateComment,
+  validateCommentId,
+} from "../controllers/commentController.js";
+import {
+  getCategories,
   getVideoById,
-  deleteVideo,
-  incrementViews,
-  likeVideo,
-  dislikeVideo,
+  getVideos,
+  incrementVideoViews,
+  updateVideoLikes,
+  validateVideoId,
 } from "../controllers/videoController.js";
-import authMiddleware from "../middleware/authMiddleware.js";
+import { authenticateUser } from "../middlewares/authMiddleware.js";
+import { validateBody } from "../middlewares/validation.js";
 
-const router = express.Router();
+const commentSchema = z.object({
+  content: z.string({ error: "content is required" }),
+});
 
-// Protected
-router.post("/", authMiddleware, createVideo);
-router.delete("/:id", authMiddleware, deleteVideo);
+const router = Router();
 
-// Public
-router.get("/", getAllVideos);
-router.get("/:id", getVideoById);
+// public videos routes
+router.get("/categories", getCategories);
+router.get("/", getVideos);
+router.get("/:videoId", validateVideoId, getVideoById);
+router.patch("/:videoId/views", validateVideoId, incrementVideoViews);
 
-// Views + Likes
-router.patch("/:id/views", incrementViews);
-router.patch("/:id/like", likeVideo);
-router.patch("/:id/dislike", dislikeVideo);
+// protected videos routes
+router.patch(
+  "/:videoId/likes",
+  authenticateUser,
+  validateVideoId,
+  updateVideoLikes
+);
+
+// video comments routes
+router.post(
+  "/:videoId/comments",
+  authenticateUser,
+  validateVideoId,
+  validateBody(commentSchema),
+  createComment
+);
+router.put(
+  "/:videoId/comments/:commentId",
+  authenticateUser,
+  validateVideoId,
+  validateCommentId,
+  validateBody(commentSchema),
+  updateComment
+);
+router.delete(
+  "/:videoId/comments/:commentId",
+  authenticateUser,
+  validateVideoId,
+  validateCommentId,
+  deleteComment
+);
 
 export default router;

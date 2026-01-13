@@ -1,0 +1,42 @@
+/* ThemeToggle.css (LOCAL ONLY) */
+
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-width: 44px;
+  min-height: 44px;
+  border-radius: 9999px;
+
+  cursor: pointer;
+  border: none;
+
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+/* 🌞 Light theme */
+html[data-theme="light"] .theme-toggle {
+  background: #f2f2f2;
+  color: #0f0f0f;
+}
+
+/* 🌙 Dark theme */
+html[data-theme="dark"] .theme-toggle {
+  background: #272727;
+  color: #f1f1f1;
+}
+
+html[data-theme="light"] .theme-toggle:hover {
+  background: #e5e5e5;
+}
+
+html[data-theme="dark"] .theme-toggle:hover {
+  background: #3a3a3a;
+}
+
+/* Icon size only */
+.theme-toggle svg {
+  width: 20px;
+  height: 20px;
+}
