@@ -1,4 +1,4 @@
-# 🎥 MERN YouTube Clone
+# ▶️ YouTube Clone 
 
 A full-stack YouTube clone built using the **MERN stack**, featuring authentication, video streaming, channels, subscriptions, comments, and a fully responsive UI.
 
