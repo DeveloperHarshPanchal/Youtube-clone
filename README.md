@@ -1,91 +1,60 @@
-# YouTube Clone – MERN Stack Project
+# 🎥 MERN YouTube Clone
 
-A full-stack **YouTube Clone** built using the **MERN stack**, replicating core YouTube features such as authentication, channel management, video playback, and a complete comment system with CRUD operations.
+A full-stack YouTube clone built using the **MERN stack**, featuring authentication, video streaming, channels, subscriptions, comments, and a fully responsive UI.
 
+---
 
-### 🛠️Tech Stack
+## 🚀 Features
 
-### 🎨Frontend
-- React (Vite)
-- React Router DOM
-- Axios
-- Context API (Authentication)
-- CSS 
+- 🔐 **User Authentication**  
+  Register and login with secure **JWT-based authentication**
 
-### ⚙️Backend
-- Node.js
-- Express.js
-- MongoDB
-- Mongoose
-- JWT Authentication
-- bcrypt
+- 🔎 **Video Browsing**  
+  Browse videos with search and category filters
 
-### Features 🚀
+- ▶️ **Video Player**  
+  Watch videos with like/dislike functionality and comments
 
-🔐 User Authentication
-Secure user registration and login using JWT-based authentication
+- 📺 **Channel Management**  
+  Create and manage your own channel
 
-🔎 Video Browsing
-Browse videos with search functionality and category-based filtering
+- ⬆️ **Video Upload & Management**  
+  Upload, edit, and delete videos from your channel
 
-▶️ Video Player
-Watch videos with like/dislike support and real-time comments
+- 💬 **Comments System**  
+  Add, edit, and delete comments on videos
 
-📺 Channel Management
-Create and manage your own channel with customizable details
+- 🔔 **Subscriptions**  
+  Subscribe to channels and view subscribed content
 
-⬆️ Video Upload & Management
-Upload, edit, and delete videos from your channel
+- 📱 **Responsive Design**  
+  Fully responsive UI for mobile, tablet, and desktop
 
-💬 Comments System
-Add, edit, and delete comments on videos
+---
 
-🔔 Subscriptions
-Subscribe to channels and view content from subscribed channels
+## 🛠️ Tech Stack
 
-📱 Responsive Design
-Fully responsive UI optimized for mobile, tablet, and desktop devices
+### 🎨 Frontend
+- ⚛️ React (Vite)
+- 🧭 React Router DOM
+- 🔗 Axios
+- 🧠 Context API (Authentication)
+- 🎨 CSS
 
-🚀 Getting Started
-📥 Clone the Repository
+### ⚙️ Backend
+- 🟢 Node.js
+- 🚀 Express.js
+- 🍃 MongoDB
+- 🧬 Mongoose
+- 🔐 JWT Authentication
+- 🔑 bcrypt
+
+---
+
+## 🛠️ Setup
+
+- Clone the repository
+
+```bash
 git clone https://github.com/KiranNamawar/demo-mern-youtube-clone.git
 cd demo-mern-youtube-clone
-
-🖥️ Server Setup
-cd server
-
-📦 Install Dependencies
-npm install
-
-🔐 Environment Variables
-cp .env.example .env
-
-
-Update the required values in the .env file.
-
-🐳 Start Database (Optional)
-npm run db:start
-
-🌱 Seed Database
-npm run db:seed
-
-▶️ Start Server
-npm run dev
-
-🌐 Client Setup
-cd client
-
-📦 Install Dependencies
-npm install
-
-▶️ Start Client
-npm run dev
-
-🔗 Access Application
-http://localhost:5173
-
-
-
-
-
-
