@@ -46,6 +46,45 @@ Subscribe to channels and view content from subscribed channels
 📱 Responsive Design
 Fully responsive UI optimized for mobile, tablet, and desktop devices
 
+🚀 Getting Started
+📥 Clone the Repository
+git clone https://github.com/KiranNamawar/demo-mern-youtube-clone.git
+cd demo-mern-youtube-clone
+
+🖥️ Server Setup
+cd server
+
+📦 Install Dependencies
+npm install
+
+🔐 Environment Variables
+cp .env.example .env
+
+
+Update the required values in the .env file.
+
+🐳 Start Database (Optional)
+npm run db:start
+
+🌱 Seed Database
+npm run db:seed
+
+▶️ Start Server
+npm run dev
+
+🌐 Client Setup
+cd client
+
+📦 Install Dependencies
+npm install
+
+▶️ Start Client
+npm run dev
+
+🔗 Access Application
+http://localhost:5173
+
+
 
 
 
