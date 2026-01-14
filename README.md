@@ -60,20 +60,31 @@ git clone https://github.com/DeveloperHarshPanchal/Youtube-clone.git
 ```
 
 - Running server
-
 ```bash
 cd backend
 ```
 
+- Install dependencies
 ```bash
-cd backend
+npm install
 ```
+
+- make .env and fill value with port and secret key and mongo url
 ```bash
-cd backend
+.env
 ```
+
+- seed Database
 ```bash
-cd backend
+npm run db:seed
 ```
+
+- Start server
+```bash
+npm run dev
+```
+
+
 
 
 
