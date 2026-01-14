@@ -58,7 +58,7 @@ A full-stack YouTube clone built using the **MERN stack**, featuring authenticat
 ```bash
 git clone https://github.com/DeveloperHarshPanchal/Youtube-clone.git
 ```
-
+## Running backend derver
 - Running server
 ```bash
 cd backend
@@ -83,6 +83,23 @@ npm run db:seed
 ```bash
 npm run dev
 ```
+## Running frontend 
+- In second terminal
+- ```bash
+  cd frontend
+  ```
+
+- Install dependencies
+- ```bash
+  npm install
+  ```
+
+  -start frontend
+  ```bash
+  npm run dev
+  ```
+
+  - open frontend on http://localhost:5173 to view it in the browser 🚀
 
 
 
