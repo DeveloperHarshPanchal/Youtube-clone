@@ -1,122 +1,211 @@
 /* ===============================
-   VIDEO COMMENTS COMPONENT
+   VIDEO COMMENTS CONTAINER
 ================================ */
-
 .video-comments {
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  padding: 8px;
+  gap: 0.5rem; /* minimal spacing between sections */
+  width: 100%;
+  padding: 0.25rem 0;
 }
 
-.video-comments h2 {
-  font-weight: bold;
-  font-size: 1.5rem;
-  margin: 0;
+.video-comments p:first-child {
+  font-weight: 500;
+  font-size: 0.95rem;
+  margin-bottom: 0.25rem;
 }
 
-/* New comment section */
+/* ===============================
+   NEW COMMENT INPUT
+================================ */
 .video-comments-new {
   display: flex;
-  gap: 8px;
-  padding: 8px 0;
+  gap: 0.5rem;
+  align-items: flex-start;
+  width: 100%;
 }
 
-.video-comments-new input {
+.new-comment-form {
+  display: flex;
+  align-items: center;
   flex: 1;
-  padding: 8px;
-  border: none;
-  border-bottom: 1px solid var(--color-fg);
+  position: relative;
+  gap: 0.25rem;
+}
+
+.new-comment-form input {
+  flex: 1;
+  padding: 0.4rem 0.75rem;
+  font-size: 0.95rem;
+  border: 1px solid #ccc;
+  border-radius: 20px; /* YouTube-style rounded input */
   outline: none;
-  background: transparent;
 }
 
-.video-comments-new input:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.video-comments-new button {
-  background: none;
-  border: none;
+.btn-comment {
+  padding: 0.3rem 0.75rem;
+  background-color: #065fd4; /* YouTube blue */
+  color: white;
+  font-size: 0.85rem;
+  font-weight: 500;
+  border: 1px solid #065fd4;
+  border-radius: 20px;
   cursor: pointer;
 }
 
-/* Comments list */
+.btn-comment:hover {
+  background-color: #054bb5;
+}
+
+/* ===============================
+   COMMENTS LIST
+================================ */
 .video-comments-list {
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  width: 100%;
-  overflow: hidden;
+  gap: 0.25rem; /* tight spacing between comments */
 }
 
+/* ===============================
+   SINGLE COMMENT
+================================ */
 .video-comment {
   display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 8px;
+  flex-direction: column;
   width: 100%;
+  border-bottom: 1px solid #eee; /* light underline like YouTube */
+  padding: 0.25rem 0;
+  position: relative;
 }
 
 .video-comment-content {
   display: flex;
-  gap: 16px;
-  flex: 1;
+  gap: 0.5rem;
 }
 
 .video-comment-text {
   display: flex;
   flex-direction: column;
   flex: 1;
+  gap: 0.15rem; /* minimal gap between author & content */
 }
 
-.video-comment-text p {
-  margin: 0;
-}
-
+/* Author and time */
 .video-comment-author {
-  display: flex;
-  gap: 16px;
-  opacity: 0.7;
+  font-weight: 500;
   font-size: 0.875rem;
+  color: white;
+  display: flex;
+  gap: 0.5rem;
 }
 
 .video-comment-body {
-  margin-top: 4px;
+  font-size: 0.95rem;
+  color: white;
+  line-height: 1.3rem;
 }
 
-/* Editing mode */
+/* ===============================
+   EDIT MODE
+================================ */
 .video-comment-editing {
   display: flex;
-  justify-content: space-between;
+  flex: 1;
+  gap: 0.25rem;
   align-items: center;
-  border-bottom: 1px solid var(--color-fg);
 }
 
 .video-comment-editing input {
   flex: 1;
-  padding: 4px 8px;
-  border: none;
+  padding: 0.35rem 0.75rem;
+  font-size: 0.95rem;
+  border: 1px solid #ccc;
+  border-radius: 20px;
   outline: none;
 }
 
-/* Author action buttons */
+/* Save + Cancel Buttons */
+.edit-buttons {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.btn-save,
+.btn-cancel {
+  padding: 0.25rem 0.6rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  border-radius: 20px;
+  border: 1px solid #ccc; /* border only */
+  cursor: pointer;
+}
+
+.btn-save {
+  background-color: #065fd4;
+  color: white;
+  border-color: #065fd4;
+}
+
+.btn-save:hover {
+  background-color: #054bb5;
+}
+
+.btn-cancel {
+  background-color: #fff;
+  color: #111;
+}
+
+.btn-cancel:hover {
+  background-color: #f1f3f4;
+  border-color: #bbb;
+}
+
+/* ===============================
+   EDIT / DELETE BUTTONS
+================================ */
 .video-comment-actions {
   display: flex;
-  gap: 8px;
-  align-items: center;
+  gap: 0.25rem;
+  margin-top: 0.1rem; /* small spacing below comment */
+  align-self: flex-end; /* right aligned */
 }
 
-.btn-secondary {
-  background: rgba(0, 0, 0, 0.05);
-  border: none;
-  border-radius: 9999px;
-  padding: 6px;
+.btn-edit,
+.btn-delete {
+  padding: 0.25rem 0.6rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  border-radius: 20px;
+  border: 1px solid #ccc; /* border only */
+  background-color: #fff;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
 }
 
-.btn-secondary:hover {
-  background: rgba(0, 0, 0, 0.15);
+.btn-edit {
+  color: #065fd4;
+}
+
+.btn-edit:hover {
+  background-color: rgba(6, 95, 212, 0.1);
+}
+
+.btn-delete {
+  color: #555;
+}
+
+.btn-delete:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+  color: #d32f2f; /* red on hover */
+}
+
+/* ===============================
+   MOBILE RESPONSIVENESS
+================================ */
+@media (max-width: 400px) {
+  .video-comment-editing .edit-buttons,
+  .video-comment-actions {
+    flex-direction: column;
+    align-items: flex-end;
+  }
 }

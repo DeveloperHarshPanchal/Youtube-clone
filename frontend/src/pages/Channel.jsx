@@ -67,39 +67,49 @@ function Channel() {
   }
 
   const backupBannerUrl = `https://picsum.photos/seed/${name}/800/200`;
-
   return (
     <div className="channel-container">
-      {/* Channel Banner */}
+      {/* ================= BANNER ================= */}
       <div className="channel-banner">
         <img
           src={banner ?? backupBannerUrl}
           alt={name}
-          onError={(evt) => (evt.currentTarget.src = backupBannerUrl)}
+          onError={(e) => (e.currentTarget.src = backupBannerUrl)}
         />
       </div>
 
-      {/* Channel Info Section */}
-      <div className="channel-info">
-        <Avatar
-          src={avatar}
-          alt={name}
-          width={80}
-          height={80}
-          className="channel-avatar"
-        />
-        <div className="channel-details">
-          <h1 className="channel-name">{name}</h1>
-          <div className="channel-meta">
-            <span>{handle?.startsWith("@") ? handle : "@" + handle}</span>
-            <span>{formatNumber(subscriberCount)} subscribers</span>
-            <span>{formatNumber(videos.length)} videos</span>
-          </div>
-          <p className="channel-description">{description}</p>
+      {/* ================= HEADER ================= */}
+      <div className="channel-header">
+        {/* LEFT */}
+        <div className="channel-header-left">
+          <Avatar
+            src={avatar}
+            alt={name}
+            width={80}
+            height={80}
+            className="channel-avatar"
+          />
 
+          <div className="channel-text">
+            <h1 className="channel-name">{name}</h1>
+
+            <div className="channel-meta">
+              <span>{handle?.startsWith("@") ? handle : "@" + handle}</span>
+              <span>{formatNumber(subscriberCount)} subscribers</span>
+              <span>{formatNumber(videos.length)} videos</span>
+            </div>
+
+            {description && (
+              <p className="channel-description">{description}</p>
+            )}
+          </div>
+        </div>
+
+        {/* RIGHT */}
+        <div className="channel-header-right">
           {isOwner ? (
             <div className="channel-owner-actions">
-              <ChannelDialog edit={true} channel={channel} />
+              <ChannelDialog edit channel={channel} />
               <Button
                 Icon={Trash2}
                 title="Delete"
@@ -112,16 +122,16 @@ function Channel() {
         </div>
       </div>
 
-      <div className="channel-divider"></div>
+      <div className="channel-divider" />
 
-      {/* Videos Grid */}
+      {/* ================= VIDEOS ================= */}
       <div className="channel-videos">
         {videos.length > 0 ? (
           <div className="video-grid">
             {videos.map((video) => (
               <VideoCard
-                video={{ ...video, channelId: { _id, name, avatar } }}
                 key={video._id}
+                video={{ ...video, channelId: { _id, name, avatar } }}
                 isOwner={isOwner}
                 onDelete={() => handleVideoDelete(video._id)}
                 channelId={_id}

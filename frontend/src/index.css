@@ -137,7 +137,13 @@ dialog {
   width: 95vw;
   max-width: 42rem; /* max-w-2xl */
   margin: auto;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  background: #020024;
+  background: radial-gradient(
+    circle,
+    rgba(2, 0, 36, 1) 0%,
+    rgba(23, 21, 21, 1) 79%,
+    rgba(213, 232, 237, 1) 100%
+  );
 }
 
 @media (max-width: 768px) {

@@ -1,9 +1,8 @@
 import { Suspense, useState } from "react";
 import { Outlet } from "react-router";
-import { Toaster } from "react-hot-toast";
-import { AlertCircle, CheckCircle, Loader2 } from "lucide-react";
 import Header from "./components/Header";
 import SideBar from "./components/SideBar";
+import { ToastProvider } from "./components/CustomToast"; // <-- Custom YouTube-style toast
 import "./App.css";
 
 function App() {
@@ -13,6 +12,9 @@ function App() {
 
   return (
     <div className="app-container">
+      {/* ToastProvider for entire app */}
+      <ToastProvider />
+
       <Header toggleSideBar={toggleSideBar} />
       <div className="app-content">
         <aside
@@ -28,26 +30,6 @@ function App() {
           </Suspense>
         </main>
       </div>
-
-      <Toaster
-        position="bottom-left"
-        toastOptions={{
-          style: {
-            background: "var(--color-bg-inverse)",
-            color: "var(--color-fg-inverse)",
-            fontWeight: "bold",
-          },
-          success: {
-            icon: <CheckCircle className="text-green-500" size={20} />,
-          },
-          error: {
-            icon: <AlertCircle className="text-red-500" size={20} />,
-          },
-          loading: {
-            icon: <Loader2 className="loader-spin" size={20} />,
-          },
-        }}
-      />
     </div>
   );
 }
@@ -55,7 +37,7 @@ function App() {
 function Loading() {
   return (
     <div className="loading-container">
-      <Loader2 className="loader-spin" />
+      <div className="loader-spin"></div>
     </div>
   );
 }

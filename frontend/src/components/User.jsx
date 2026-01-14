@@ -8,9 +8,10 @@ import LoginButton from "./LoginButton";
 import Button from "./Button";
 import ChannelDialog from "./ChannelDialog";
 import VideoDialog from "./VideoDialog";
-import toast from "react-hot-toast";
+import { showSuccess, showError } from "./CustomToast"; // custom toast functions
 import { Link } from "react-router";
 import "./User.css";
+import "./CustomToast.css";
 
 function User() {
   const dispatch = useDispatch();
@@ -25,7 +26,7 @@ function User() {
         .then((res) => {
           dispatch(loginSuccess({ ...res.data.data, accessToken }));
         })
-        .catch(console.error);
+        .catch(() => showError("Failed to fetch user info"));
     }
   }, [isAuthenticated]);
 
@@ -33,6 +34,7 @@ function User() {
     <div className="user-container">
       {isAuthenticated ? (
         <>
+          {/* Create Button */}
           <button
             popoverTarget="create-box"
             title="Create"
@@ -48,6 +50,7 @@ function User() {
             </div>
           </div>
 
+          {/* User Avatar */}
           <button popoverTarget="user-profile" className="cursor-pointer">
             <Avatar
               src={user.avatar}
@@ -92,10 +95,11 @@ function User() {
 
               <div className="separator"></div>
 
+              {/* Logout Button */}
               <Button
                 onClick={() => {
                   dispatch(logoutSuccess());
-                  toast.success("Logout Successful");
+                  showSuccess("Logout Successful");
                 }}
                 Icon={LogOut}
                 title="Logout"
