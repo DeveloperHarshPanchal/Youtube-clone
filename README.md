@@ -1,7 +1,8 @@
 # 🎥 MERN YouTube Clone
 
 A full-stack YouTube clone built using the **MERN stack**, featuring authentication, video streaming, channels, subscriptions, comments, and a fully responsive UI.
-Github repository link : https://github.com/DeveloperHarshPanchal/Youtube-clone 
+
+-Github repository link : https://github.com/DeveloperHarshPanchal/Youtube-clone 
 
 ---
 
@@ -86,7 +87,7 @@ npm run dev
 ```
 ## Running frontend 
 - In second terminal
-- ```bash
+```bash
 cd frontend
 ```
 
@@ -95,7 +96,7 @@ cd frontend
 npm install
 ```
 
--start frontend
+- start frontend
 ```bash
 npm run dev
 ```
