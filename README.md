@@ -20,8 +20,7 @@ A full-stack **YouTube Clone** built using the **MERN stack**, replicating core 
 - JWT Authentication
 - bcrypt
 
-### Features
-🚀 Features
+### Features 🚀
 
 🔐 User Authentication
 Secure user registration and login using JWT-based authentication
