@@ -57,6 +57,9 @@ A full-stack YouTube clone built using the **MERN stack**, featuring authenticat
 
 ```bash
 git clone https://github.com/DeveloperHarshPanchal/Youtube-clone.git
+```
+
+
 
 - Running server
 
