@@ -5,14 +5,14 @@ A full-stack **YouTube Clone** built using the **MERN stack**, replicating core 
 
 ### 🛠️Tech Stack
 
-### Frontend
+### 🎨Frontend
 - React (Vite)
 - React Router DOM
 - Axios
 - Context API (Authentication)
 - CSS 
 
-### Backend
+### ⚙️Backend
 - Node.js
 - Express.js
 - MongoDB
