@@ -2,7 +2,7 @@
 
 A full-stack YouTube clone built using the **MERN stack**, featuring authentication, video streaming, channels, subscriptions, comments, and a fully responsive UI.
 
--Github repository link : https://github.com/DeveloperHarshPanchal/Youtube-clone 
+Github repository link : https://github.com/DeveloperHarshPanchal/Youtube-clone 
 
 ---
 
