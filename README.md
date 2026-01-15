@@ -1,16 +1,109 @@
-# React + Vite
+# ▶️ YouTube Clone 
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A full-stack YouTube clone built using the **MERN stack**, featuring authentication, video streaming, channels, subscriptions, comments, and a fully responsive UI.
 
-Currently, two official plugins are available:
+Github repository link : https://github.com/DeveloperHarshPanchal/Youtube-clone 
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## React Compiler
+## 🚀 Features
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- 🔐 **User Authentication**  
+  Register and login with secure **JWT-based authentication**
 
-## Expanding the ESLint configuration
+- 🔎 **Video Browsing**  
+  Browse videos with search and category filters
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- ▶️ **Video Player**  
+  Watch videos with like/dislike functionality and comments
+
+- 📺 **Channel Management**  
+  Create and manage your own channel
+
+- ⬆️ **Video Upload & Management**  
+  Upload, edit, and delete videos from your channel
+
+- 💬 **Comments System**  
+  Add, edit, and delete comments on videos
+
+- 🔔 **Subscriptions**  
+  Subscribe to channels and view subscribed content
+
+- 📱 **Responsive Design**  
+  Fully responsive UI for mobile, tablet, and desktop
+
+---
+
+## 🛠️ Tech Stack
+
+### 🎨 Frontend
+- ⚛️ React (Vite)
+- 🧭 React Router DOM
+- 🔗 Axios
+- 🧠 Context API (Authentication)
+- 🎨 CSS
+
+### ⚙️ Backend
+- 🟢 Node.js
+- 🚀 Express.js
+- 🍃 MongoDB
+- 🧬 Mongoose
+- 🔐 JWT Authentication
+- 🔑 bcrypt
+
+---
+
+## 🛠️ Setup
+
+- Clone the repository
+
+```bash
+git clone https://github.com/DeveloperHarshPanchal/Youtube-clone.git
+```
+## Running backend derver
+- Running server
+```bash
+cd backend
+```
+
+- Install dependencies
+```bash
+npm install
+```
+
+- make .env and fill value with port and secret key and mongo url
+```bash
+.env
+```
+
+- seed Database
+```bash
+npm run db:seed
+```
+
+- Start server
+```bash
+npm run dev
+```
+## Running frontend 
+- In second terminal
+```bash
+cd frontend
+```
+
+- Install dependencies
+```bash
+npm install
+```
+
+- start frontend
+```bash
+npm run dev
+```
+
+- open frontend on http://localhost:5173 to view it in the browser 🚀
+
+
+
+
+
