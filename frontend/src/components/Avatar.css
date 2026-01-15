@@ -1,15 +1,62 @@
 /* Avatar.css */
 
+/* ===============================
+   AVATAR (GLOBAL / HEADER SAFE)
+================================ */
+
 .avatar {
   display: flex;
   align-items: center;
+  justify-content: center;
+
+  width: 2.5rem; /* 40px default */
+  height: 2.5rem;
+
   border-radius: 9999px;
-  height: fit-content;
-  width: fit-content;
+  cursor: pointer;
 }
 
+/* Avatar Image */
 .avatar-img {
+  width: 100%;
+  height: 100%;
   border-radius: 9999px;
   object-fit: cover;
   display: block;
+
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+/* Hover ring (YouTube-like) */
+.avatar:hover .avatar-img {
+  box-shadow: 0 0 0 0.125rem rgba(59, 130, 246, 0.6);
+  transform: scale(1.05);
+}
+
+/* Click feedback */
+.avatar:active .avatar-img {
+  transform: scale(0.97);
+}
+/* Mobile */
+@media (max-width: 640px) {
+  .avatar {
+    width: 2.25rem; /* 36px */
+    height: 2.25rem;
+  }
+}
+
+/* Tablet */
+@media (min-width: 641px) and (max-width: 1024px) {
+  .avatar {
+    width: 2.5rem; /* 40px */
+    height: 2.5rem;
+  }
+}
+
+/* Large screens */
+@media (min-width: 1025px) {
+  .avatar {
+    width: 2.75rem; /* 44px */
+    height: 2.75rem;
+  }
 }

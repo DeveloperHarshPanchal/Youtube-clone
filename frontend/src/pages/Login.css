@@ -11,7 +11,13 @@
   justify-content: center;
   align-items: center;
   padding: 1rem;
-  background: var(--color-bg);
+  background: #020024;
+  background: radial-gradient(
+    circle,
+    rgba(2, 0, 36, 1) 0%,
+    rgba(23, 21, 21, 1) 79%,
+    rgba(213, 232, 237, 1) 100%
+  );
 }
 
 /* Control card width */
